@@ -1,0 +1,97 @@
+.education-section {
+    padding: 4rem 2rem;
+    background-color: var(--bg-secondary);
+    /* Alternating background if needed */
+}
+
+.education-card {
+    background-color: var(--bg-main);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.education-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.education-icon {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+    padding: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.education-content h3 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.university-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.university-info .separator {
+    color: var(--border-color);
+}
+
+.university-info .year {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.university {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.gpa-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+@media (max-width: 768px) {
+    .education-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .university-info {
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .university-info .separator {
+        display: none;
+    }
+}

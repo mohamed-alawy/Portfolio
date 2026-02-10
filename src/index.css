@@ -1,0 +1,81 @@
+:root {
+  /* Primary Colors */
+  --primary: #2563EB;
+  /* Vibrant Blue */
+  --primary-dark: #1E40AF;
+  --primary-light: #60A5FA;
+
+  /* Text Colors */
+  --text-main: #0F172A;
+  /* Slate 900 */
+  --text-muted: #64748B;
+  /* Slate 500 */
+  --text-light: #F8FAFC;
+  /* Slate 50 */
+
+  /* Background Colors */
+  --bg-main: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  /* Light Gray */
+  --bg-glass: rgba(255, 255, 255, 0.8);
+
+  /* Borders & Shadows */
+  --border-color: #E2E8F0;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dark Mode Variables */
+[data-theme='dark'] {
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --bg-main: #0F172A;
+  /* Dark Slate */
+  --bg-secondary: #1E293B;
+  /* Darker Slate */
+  --bg-glass: rgba(15, 23, 42, 0.8);
+  --border-color: #334155;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
