@@ -162,7 +162,8 @@
         margin-bottom: 2rem;
     }
 
-    .timeline-item::after {
+    .timeline-item::after,
+    .timeline-item.right::after {
         left: 23px;
         right: auto;
     }

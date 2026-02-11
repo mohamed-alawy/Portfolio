@@ -298,6 +298,9 @@
     /* Restore the standard back link since sticky nav is gone */
     .back-link {
         display: inline-flex;
+        margin-left: 1.5rem;
+        /* Align with content padding */
+        margin-top: 1rem;
     }
 }
 
