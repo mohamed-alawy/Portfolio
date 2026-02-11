@@ -348,6 +348,8 @@
     border-radius: 20px;
     outline: none;
     transition: border-color 0.2s;
+    font-size: 16px;
+    /* Prevents auto-zoom on mobile */
 }
 
 .chatbot-input input:focus {
