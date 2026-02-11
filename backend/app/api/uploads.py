@@ -47,7 +47,7 @@ async def upload_multiple_images(files: List[UploadFile] = File(...)):
     return results
 
 
-@router.get("/files/{filename}")
+@router.get("/{filename}")
 async def serve_file(filename: str):
     """Serve an uploaded file."""
     file_path = os.path.join(UPLOAD_DIR, filename)

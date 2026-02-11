@@ -24,15 +24,15 @@ It is designed to assist healthcare professionals in diagnosing various conditio
         "demo_link": "#",
         "demo_label": None,
         "image_urls": [
-            "/api/v1/uploads/files/2.png",
-            "/api/v1/uploads/files/3.png",
-            "/api/v1/uploads/files/4.png",
-            "/api/v1/uploads/files/6.png",
-            "/api/v1/uploads/files/7.png",
-            "/api/v1/uploads/files/8.png",
-            "/api/v1/uploads/files/9.png",
-            "/api/v1/uploads/files/11.png",
-            "/api/v1/uploads/files/image_original.png",
+            "/api/v1/uploads/2.png",
+            "/api/v1/uploads/3.png",
+            "/api/v1/uploads/4.png",
+            "/api/v1/uploads/6.png",
+            "/api/v1/uploads/7.png",
+            "/api/v1/uploads/8.png",
+            "/api/v1/uploads/9.png",
+            "/api/v1/uploads/11.png",
+            "/api/v1/uploads/image_original.png",
         ],
     },
     {
@@ -58,14 +58,14 @@ The system employs a hybrid architecture, combining fast on-device models for re
         "demo_link": "https://apps.apple.com/us/app/%D9%8A%D8%B3%D8%B1/id6752940380",
         "demo_label": "App Store",
         "image_urls": [
-            "/api/v1/uploads/files/screen1.jpeg",
-            "/api/v1/uploads/files/screen2.jpeg",
-            "/api/v1/uploads/files/scanner.jpeg",
-            "/api/v1/uploads/files/screen3.jpeg",
-            "/api/v1/uploads/files/screen4.jpeg",
-            "/api/v1/uploads/files/screen5.jpeg",
-            "/api/v1/uploads/files/form.jpeg",
-            "/api/v1/uploads/files/final_form.jpeg",
+            "/api/v1/uploads/screen1.jpeg",
+            "/api/v1/uploads/screen2.jpeg",
+            "/api/v1/uploads/scanner.jpeg",
+            "/api/v1/uploads/screen3.jpeg",
+            "/api/v1/uploads/screen4.jpeg",
+            "/api/v1/uploads/screen5.jpeg",
+            "/api/v1/uploads/form.jpeg",
+            "/api/v1/uploads/final_form.jpeg",
         ],
     },
     {
@@ -151,13 +151,20 @@ New challenges excite me - they push me to research, experiment, and deliver res
 
 
 async def seed_projects(session: AsyncSession):
-    """Seed the database with initial portfolio data if empty."""
-    # Seed Projects
-    result = await session.execute(select(Project))
-    if len(result.scalars().all()) == 0:
-        for p in SEED_PROJECTS:
-            session.add(Project(**p))
-        print(f"Seeded {len(SEED_PROJECTS)} projects.")
+    """Wipe and re-seed all portfolio data to fix URLs and IDs."""
+    from sqlalchemy import delete
+    
+    # Wipe existing data to force fresh IDs and URLs
+    await session.execute(delete(Project))
+    await session.execute(delete(Experience))
+    await session.execute(delete(Certification))
+    await session.execute(delete(About))
+    await session.commit()
+
+    # Re-seed Projects
+    for p in SEED_PROJECTS:
+        session.add(Project(**p))
+    print(f"Freshly seeded {len(SEED_PROJECTS)} projects.")
 
     # Seed Experience
     result = await session.execute(select(Experience))
