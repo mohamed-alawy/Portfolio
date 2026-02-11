@@ -49,7 +49,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="logo">
-                    <a href="/" onClick={handleLogoClick} className="logo-text">MA.</a>
+                    <a href="/" onClick={handleLogoClick}>MA.</a>
                 </div>
 
                 <div className="desktop-menu">

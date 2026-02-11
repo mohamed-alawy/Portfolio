@@ -19,22 +19,17 @@ function App() {
   const [theme, setTheme] = useState('light')
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme')
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light')
-
-    setTheme(initialTheme)
-    document.documentElement.setAttribute('data-theme', initialTheme)
-
-    // Optional: Listen for system theme changes if no manual theme is set
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
     const handleChange = (e) => {
-      if (!localStorage.getItem('theme')) {
-        const newTheme = e.matches ? 'dark' : 'light'
-        setTheme(newTheme)
-        document.documentElement.setAttribute('data-theme', newTheme)
-      }
+      const newTheme = e.matches ? 'dark' : 'light'
+      setTheme(newTheme)
+      document.documentElement.setAttribute('data-theme', newTheme)
     }
+
+    // Set initial theme
+    handleChange(mediaQuery)
+
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
@@ -42,7 +37,6 @@ function App() {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
-    localStorage.setItem('theme', newTheme)
     document.documentElement.setAttribute('data-theme', newTheme)
   }
 
