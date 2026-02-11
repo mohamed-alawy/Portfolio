@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from app.core.db import init_db, engine
 from app.core.seed import seed_projects
+from app.core.config import settings
 from app.api import projects, contact, chat, documents, auth, uploads, portfolio
 
 
