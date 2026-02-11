@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: portfolio-backend
+    env: python
+    buildCommand: uv pip install -r requirements.txt --system
+    startCommand: gunicorn app.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - fromGroup: portfolio-secrets
