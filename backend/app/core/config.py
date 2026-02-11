@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000", "http://localhost:80"]
     
     # Database
+    DATABASE_URL: str | None = None
     POSTGRES_USER: str | None = None
     POSTGRES_PASSWORD: str | None = None
     POSTGRES_SERVER: str | None = None
@@ -23,8 +24,13 @@ class Settings(BaseSettings):
     ADMIN_USERNAME: str | None = None
     ADMIN_PASSWORD: str | None = None
     
-    @property
-    def DATABASE_URL(self) -> str:
+    def get_database_url(self) -> str:
+        if self.DATABASE_URL:
+            # Handle cases where the URL provided might not have the +asyncpg driver
+            url = self.DATABASE_URL
+            if url.startswith("postgresql://"):
+                url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return url
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     class Config:

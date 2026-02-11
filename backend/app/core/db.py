@@ -13,7 +13,7 @@ from app.models.portfolio import (  # noqa: F401
 )
 
 # Create Async Engine
-engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True)
+engine = create_async_engine(settings.get_database_url(), echo=False, future=True)
 
 
 async def init_db():
