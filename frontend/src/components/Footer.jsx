@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Github, Linkedin, Mail, FileText, Send } from 'lucide-react'
 import '../styles/Footer.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Footer = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' })

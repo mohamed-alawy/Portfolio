@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink } from 'lucide-react'
 import '../styles/Dashboard.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Dashboard = ({ token, onLogout }) => {
     const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {}

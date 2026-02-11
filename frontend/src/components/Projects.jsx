@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { ExternalLink, Github, Code, ArrowRight } from 'lucide-react'
 import '../styles/Projects.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Projects = () => {
     const [projects, setProjects] = useState([])

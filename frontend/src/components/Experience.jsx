@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Briefcase, Calendar } from 'lucide-react'
 import '../styles/Experience.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Experience = () => {
     const [experiences, setExperiences] = useState([])

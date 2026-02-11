@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Lock, User, LogIn } from 'lucide-react'
 import '../styles/Login.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState('')

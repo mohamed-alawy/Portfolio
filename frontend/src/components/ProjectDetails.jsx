@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Github, ExternalLink, Code } from 'lucide-react'
 import '../styles/ProjectDetails.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const ProjectDetails = () => {
     const { id } = useParams()

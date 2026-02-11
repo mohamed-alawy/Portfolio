@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Login from './Login'
 import Dashboard from './Dashboard'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const AdminPage = () => {
     const [token, setToken] = useState(localStorage.getItem('admin_token'))

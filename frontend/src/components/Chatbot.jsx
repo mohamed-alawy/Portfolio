@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, X, Send, Bot, User, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
+import API_BASE from '../config'
 import '../styles/Chatbot.css'
 
 const chatBotImage = '/images/chatBot.png'
@@ -58,7 +59,7 @@ const Chatbot = () => {
         })).filter(m => m.content.trim() !== "")
 
         try {
-            const res = await fetch('http://localhost:8000/api/v1/chat/', {
+            const res = await fetch(`${API_BASE}/chat/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: query, history })

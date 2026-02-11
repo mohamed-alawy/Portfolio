@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Award, ExternalLink } from 'lucide-react'
 import '../styles/Certifications.css'
 
-const API_BASE = 'http://localhost:8000/api/v1'
+import API_BASE from '../config'
 
 const Certifications = () => {
     const [certifications, setCertifications] = useState([])
