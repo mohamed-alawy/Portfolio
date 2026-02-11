@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Menu, X, Moon, Sun } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
+import API_BASE, { getImageUrl } from '../config'
 import '../styles/Navbar.css'
 
 const Navbar = ({ theme, toggleTheme }) => {
@@ -48,7 +49,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="logo">
-                    <a href="/" onClick={handleLogoClick}>MA.</a>
+                    <a href="/" onClick={handleLogoClick} className="logo-text">MA.</a>
                 </div>
 
                 <div className="desktop-menu">
