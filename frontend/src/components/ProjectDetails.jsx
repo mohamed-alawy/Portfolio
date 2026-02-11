@@ -124,7 +124,7 @@ const ProjectDetails = () => {
                                         if (line.trim().startsWith('###')) {
                                             return <h4 key={index}>{renderContent(line.replace('###', '').trim())}</h4>
                                         } else if (line.trim().startsWith('-')) {
-                                            return <li key={index}>{renderContent(line.replace('-', '').trim())}</li>
+                                            return <div key={index} className="md-list-item">{renderContent(line.replace('-', '').trim())}</div>
                                         } else if (line.trim() === '') {
                                             return <br key={index} />
                                         } else {

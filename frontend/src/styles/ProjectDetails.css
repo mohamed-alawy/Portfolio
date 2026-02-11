@@ -281,8 +281,10 @@
 }
 
 @media (max-width: 768px) {
+
+    /* Sticky nav removed as per user request to avoid double headers */
     .sticky-project-nav {
-        display: block;
+        display: none;
     }
 
     .project-details-page {
@@ -293,9 +295,9 @@
         font-size: 2.2rem;
     }
 
+    /* Restore the standard back link since sticky nav is gone */
     .back-link {
-        display: none;
-        /* Hide original back link on mobile since we have sticky */
+        display: inline-flex;
     }
 }
 
@@ -332,4 +334,35 @@
     to {
         opacity: 1;
     }
+}
+
+/* Markdown List Item Styling */
+.md-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+    margin-left: 0.5rem;
+    /* Slight indent to align nicely with text above */
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.md-list-item::before {
+    content: '•';
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.5rem;
+    /* Slightly larger bullet */
+    line-height: k;
+    /* Visual tweak */
+    margin-top: -0.2rem;
+    /* Pull up */
+    flex-shrink: 0;
+}
+
+.md-list-item strong {
+    color: var(--text-main);
+    font-weight: 600;
 }
