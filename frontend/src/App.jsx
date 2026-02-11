@@ -14,9 +14,12 @@ import Chatbot from './components/Chatbot'
 import AdminPage from './components/AdminPage'
 
 import ScrollToTop from './components/ScrollToTop'
+import SkeletonLoader from './components/SkeletonLoader'
+import { getImageUrl } from './config'
 
 function App() {
   const [theme, setTheme] = useState('light')
+  const [appReady, setAppReady] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -31,6 +34,32 @@ function App() {
     handleChange(mediaQuery)
 
     mediaQuery.addEventListener('change', handleChange)
+
+    // Wait for critical assets
+    const initApp = async () => {
+      try {
+        // Wait for fonts
+        await document.fonts.ready
+
+        // Preload Hero Image
+        const img = new Image()
+        img.src = getImageUrl('/uploads/my_photo.png')
+        await new Promise((resolve) => {
+          img.onload = resolve
+          img.onerror = resolve
+        })
+
+        // Mini delay for visual smoothness
+        await new Promise(resolve => setTimeout(resolve, 300))
+        setAppReady(true)
+      } catch (e) {
+        console.error('App priming failed', e)
+        setAppReady(true)
+      }
+    }
+
+    initApp()
+
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
@@ -39,6 +68,8 @@ function App() {
     setTheme(newTheme)
     document.documentElement.setAttribute('data-theme', newTheme)
   }
+
+  if (!appReady) return <SkeletonLoader />
 
   return (
     <Router>

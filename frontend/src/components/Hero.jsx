@@ -9,7 +9,7 @@ const heroImage = '/uploads/my_photo.png'
 
 const Hero = () => {
     return (
-        <section id="hero" className="hero-section">
+        <section id="hero" className="hero-section loaded">
             <div className="hero-container">
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
@@ -69,7 +69,11 @@ const Hero = () => {
                     className="hero-image-wrapper"
                 >
                     <div className="hero-gradient-bg"></div>
-                    <img src={getImageUrl(heroImage)} alt="Mohamed Alawy" className="hero-img" />
+                    <img
+                        src={getImageUrl(heroImage)}
+                        alt="Mohamed Alawy"
+                        className="hero-img"
+                    />
                 </motion.div>
             </div>
         </section>

@@ -82,23 +82,35 @@
 }
 
 .project-gallery {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
     justify-content: center;
-    gap: 2rem;
 }
 
 .gallery-item {
-    flex: 0 1 350px;
-    /* Fixed basis for consistent sizing */
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .gallery-item:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 768px) {
+    .project-gallery {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .gallery-item {
+        max-width: 100%;
+    }
 }
 
 .gallery-item img {
@@ -171,6 +183,87 @@
 
 .gallery-item {
     cursor: default;
+}
+
+/* Sticky Project Nav */
+.sticky-project-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: none;
+    /* Hidden by default */
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.sticky-nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.sticky-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sticky-back,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--text-main);
+    transition: background 0.2s;
+}
+
+.sticky-back:hover,
+.nav-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .sticky-project-nav {
+        display: block;
+    }
+
+    .project-details-page {
+        padding-top: 80px;
+    }
+
+    .project-title-large {
+        font-size: 2.2rem;
+    }
+
+    .back-link {
+        display: none;
+        /* Hide original back link on mobile since we have sticky */
+    }
 }
 
 /* Image Modal */

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Github, ExternalLink, Code } from 'lucide-react'
+import { SkeletonHero } from './SkeletonLoader'
 import '../styles/ProjectDetails.css'
 
 import API_BASE, { getImageUrl } from '../config'
@@ -14,22 +15,35 @@ const ProjectDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        fetch(`${API_BASE}/projects/${id}`)
-            .then(res => {
+
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/projects/${id}`)
                 if (!res.ok) throw new Error('Not found')
-                return res.json()
-            })
-            .then(data => setProject(data))
-            .catch(err => console.error(err))
-            .finally(() => setLoading(false))
+                const data = await res.json()
+                setProject(data)
+
+                // Preload at least the first gallery image if it exists
+                if (data.image_urls && data.image_urls.length > 0) {
+                    const firstImg = new Image()
+                    firstImg.src = getImageUrl(data.image_urls[0])
+                    await new Promise(resolve => {
+                        firstImg.onload = resolve
+                        firstImg.onerror = resolve
+                    })
+                }
+            } catch (err) {
+                console.error(err)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchData()
     }, [id])
 
     if (loading) {
-        return (
-            <div className="project-not-found">
-                <p style={{ color: 'var(--text-muted)' }}>Loading...</p>
-            </div>
-        )
+        return <SkeletonHero />
     }
 
     if (!project) {
@@ -50,6 +64,22 @@ const ProjectDetails = () => {
                 <Link to="/" className="back-link">
                     <ArrowLeft size={20} /> Back to Projects
                 </Link>
+
+                <div className="sticky-project-nav">
+                    <div className="sticky-nav-content">
+                        <Link to="/" className="sticky-back">
+                            <ArrowLeft size={24} />
+                        </Link>
+                        <span className="sticky-title">{project.title}</span>
+                        <div className="sticky-actions">
+                            {project.demo_link && (
+                                <a href={project.demo_link} target="_blank" rel="noopener noreferrer" className="nav-btn">
+                                    <ExternalLink size={18} />
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

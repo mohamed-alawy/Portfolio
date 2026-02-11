@@ -159,10 +159,12 @@
         width: 100%;
         padding-left: 70px;
         padding-right: 25px;
+        margin-bottom: 2rem;
     }
 
     .timeline-item::after {
-        left: 21px;
+        left: 23px;
+        right: auto;
     }
 
     .timeline-item.right {

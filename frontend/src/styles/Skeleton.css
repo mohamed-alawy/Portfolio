@@ -1,0 +1,156 @@
+.skeleton-page-loader {
+    background-color: var(--bg-main);
+    min-height: 100vh;
+    padding-top: 100px;
+    overflow: hidden;
+}
+
+.skeleton-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.skeleton-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 6rem;
+}
+
+.skeleton-item {
+    background: linear-gradient(90deg,
+            var(--bg-secondary) 25%,
+            var(--border-color) 50%,
+            var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
+    border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Hero Skeleton Items */
+.skeleton-item.title {
+    width: 40%;
+    height: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-item.subtitle {
+    width: 90%;
+    height: 3.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-item.text {
+    width: 100%;
+    height: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.skeleton-item.text.short {
+    width: 70%;
+}
+
+.skeleton-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.skeleton-item.button {
+    width: 160px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.skeleton-circle {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
+    margin: 0 auto;
+}
+
+/* Grid & Cards */
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.skeleton-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.skeleton-item.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-item.card-title {
+    width: 70%;
+    height: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.skeleton-item.card-text {
+    width: 100%;
+    height: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.skeleton-item.card-text.short {
+    width: 40%;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-tags {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.skeleton-item.tag {
+    width: 60px;
+    height: 24px;
+    border-radius: 20px;
+}
+
+@media (max-width: 968px) {
+    .skeleton-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .skeleton-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .skeleton-actions {
+        justify-content: center;
+    }
+
+    .skeleton-circle {
+        width: 300px;
+        height: 300px;
+    }
+}
