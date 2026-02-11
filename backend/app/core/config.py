@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     
     # Gemini
     GEMINI_API_KEY: str | None = None
-    GENERATION_MODEL: str = "gemini-1.5-flash"
-    EMBEDDING_MODEL: str = "models/text-embedding-004"
+    GENERATION_MODEL: str = "gemini-2.5-flash"
+    EMBEDDING_MODEL: str = "models/text-embedding-001"
     EMBEDDING_DIMENSIONS: int = 3072
     
     # Auth
