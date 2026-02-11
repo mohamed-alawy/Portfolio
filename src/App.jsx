@@ -12,6 +12,8 @@ import Certifications from './components/Certifications'
 import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
 
+import ScrollToTop from './components/ScrollToTop'
+
 function App() {
   const [theme, setTheme] = useState('light')
 
@@ -31,6 +33,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Navbar theme={theme} toggleTheme={toggleTheme} />
         <Routes>

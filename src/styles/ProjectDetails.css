@@ -62,87 +62,84 @@
 
 .project-content {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: 2fr 1fr;
     gap: 4rem;
+    margin-bottom: 4rem;
 }
 
-.description-section {
-    margin-bottom: 3rem;
-    color: var(--text-muted);
-    line-height: 1.8;
-    font-size: 1.05rem;
-}
-
-.description-section h3 {
+.project-gallery-section h3 {
+    font-size: 2rem;
     color: var(--text-main);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.markdown-content h4 {
-    color: var(--primary);
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-}
-
-.markdown-content li {
-    margin-bottom: 0.5rem;
-    margin-left: 1.5rem;
-}
-
-.tech-stack-section h3 {
-    color: var(--text-main);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .tech-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-}
-
-.tech-tag {
-    background: var(--bg-secondary);
-    color: var(--text-main);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    border: 1px solid var(--border-color);
+    align-items: flex-start;
 }
 
 .project-gallery {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
+}
+
+.gallery-item {
+    flex: 0 1 350px;
+    /* Fixed basis for consistent sizing */
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
 .gallery-item img {
     width: 100%;
+    height: auto;
+    display: block;
     border-radius: 12px;
-    box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
 }
 
-.gallery-placeholder {
+/* Sidebar Styling */
+.project-sidebar {
     background: var(--bg-secondary);
-    border: 2px dashed var(--border-color);
+    padding: 2rem;
     border-radius: 16px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    gap: 1rem;
+    border: 1px solid var(--border-color);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    /* Sticky sidebar when scrolling description */
 }
 
+/* Remove old tech stack margin since it's now in sidebar */
+.tech-stack-section {
+    margin-bottom: 0;
+}
+
+/* Responsive */
 @media (max-width: 968px) {
     .project-content {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
+
+    .project-sidebar {
+        position: static;
+        order: -1;
+        /* Show tech stack above description on mobile? Or below? Let's keep below for flow, or above for context */
+        order: 1;
+    }
+
 
     .project-gallery {
         order: -1;
@@ -152,5 +149,61 @@
 
     .project-title-large {
         font-size: 2.5rem;
+    }
+}
+
+.tech-tag {
+    background: var(--bg-main);
+    /* Changed from secondary to main for contrast in sidebar */
+    color: var(--text-main);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    white-space: nowrap;
+    /* Prevent multi-word tags from wrapping awkwardly */
+}
+
+.tech-stack-section h3 {
+    margin-bottom: 1.5rem;
+    /* Increased spacing */
+}
+
+.gallery-item {
+    cursor: default;
+}
+
+/* Image Modal */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 2rem;
+    cursor: default;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    object-fit: contain;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

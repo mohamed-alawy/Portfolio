@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import { Menu, X, Moon, Sun, Github, Linkedin } from 'lucide-react'
+import { Menu, X, Moon, Sun } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useNavigate, useLocation } from 'react-router-dom'
 import '../styles/Navbar.css'
 
 const Navbar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false)
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const navLinks = [
         { name: 'About', href: '#about' },
@@ -16,16 +19,46 @@ const Navbar = ({ theme, toggleTheme }) => {
         { name: 'Contact', href: '#contact' },
     ]
 
+    const handleNavClick = (e, href) => {
+        e.preventDefault()
+        setIsOpen(false)
+
+        const targetId = href.replace('#', '')
+
+        if (location.pathname !== '/') {
+            navigate('/', { state: { scrollTo: targetId } })
+        } else {
+            const element = document.getElementById(targetId)
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' })
+            }
+        }
+    }
+
+    const handleLogoClick = (e) => {
+        e.preventDefault()
+        if (location.pathname !== '/') {
+            navigate('/')
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+    }
+
     return (
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="logo">
-                    <a href="#">MA.</a>
+                    <a href="/" onClick={handleLogoClick}>MA.</a>
                 </div>
 
                 <div className="desktop-menu">
                     {navLinks.map((link) => (
-                        <a key={link.name} href={link.href} className="nav-link">
+                        <a
+                            key={link.name}
+                            href={link.href}
+                            className="nav-link"
+                            onClick={(e) => handleNavClick(e, link.href)}
+                        >
                             {link.name}
                         </a>
                     ))}
@@ -55,7 +88,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                             key={link.name}
                             href={link.href}
                             className="mobile-nav-link"
-                            onClick={() => setIsOpen(false)}
+                            onClick={(e) => handleNavClick(e, link.href)}
                         >
                             {link.name}
                         </a>

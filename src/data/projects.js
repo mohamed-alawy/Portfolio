@@ -1,5 +1,26 @@
 import React from 'react'
 
+// MedXpert Images
+import medxpertOriginal from '../assets/images/image_original.png'
+import medxpert2 from '../assets/images/2.png'
+import medxpert3 from '../assets/images/3.png'
+import medxpert4 from '../assets/images/4.png'
+import medxpert6 from '../assets/images/6.png'
+import medxpert7 from '../assets/images/7.png'
+import medxpert8 from '../assets/images/8.png'
+import medxpert9 from '../assets/images/9.png'
+import medxpert11 from '../assets/images/11.png'
+
+// Yosr Images
+import formImg from '../assets/images/form.jpeg'
+import finalFormImg from '../assets/images/final_form.jpeg'
+import scannerImg from '../assets/images/scanner.jpeg'
+import screen1Img from '../assets/images/screen1.jpeg'
+import screen2Img from '../assets/images/screen2.jpeg'
+import screen3Img from '../assets/images/screen3.jpeg'
+import screen4Img from '../assets/images/screen4.jpeg'
+import screen5Img from '../assets/images/screen5.jpeg'
+
 export const projects = [
     {
         id: 'medxpert',
@@ -18,27 +39,57 @@ export const projects = [
         `,
         tags: ['Python', 'Deep Learning', 'CNN', 'U-Net', 'Medical Imaging'],
         links: { github: 'https://github.com/mohamed-alawy/medxpert', demo: '#' },
-        images: [] // Placeholder for future images
+        images: [
+            medxpert2,
+            medxpert3,
+            medxpert4,
+            medxpert6,
+            medxpert7,
+            medxpert8,
+            medxpert9,
+            medxpert11,
+            medxpertOriginal
+        ]
     },
     {
         id: 'yosr',
         title: 'Yosr',
         category: 'AI Accessibility Assistant',
-        description: 'Real-time document and currency detection using YOLO with Gemini-based text-to-speech for visually impaired users. Sub-2s latency.',
+        description: 'Real-time form detection and filling assistant for visually impaired users. Features on-device ONNX models for detection & orientation, with a robust backend for processing, validation, and smart field mapping using Gemini & Gemini Nano.',
         fullDescription: `
-            Yosr is an innovative mobile application designed to empower visually impaired individuals.
-            By leveraging real-time computer vision and generative AI, it provides audible feedback about the user's surroundings.
+            Yosr is an advanced accessibility application designed to help visually impaired individuals interact with physical forms independently.
+            The system employs a hybrid architecture, combining fast on-device models for real-time guidance with powerful backend models for precise processing.
             
-            ### Key Features:
-            - **Real-time Detection**: Custom YOLO model for detecting currency and documents instantly.
-            - **Text-to-Speech**: Integrated Gemini AI to read detected text and describe scenes naturally.
-            - **Currency Recognition**: Identifies various currency denominations to assist in daily transactions.
-            - **Low Latency**: Optimized inference pipeline achieving sub-2 second response times on mobile devices.
+            ### Technical Workflow:
+            - **On-Device Real-time Analysis**: 
+                - Uses **two ONNX models** running locally on the app.
+                - **Model 1**: Detects forms in real-time.
+                - **Model 2**: specific model to determine the orientation of the document (upright vs. inverted).
+            
+            - **Backend Processing Pipeline**:
+                - **Advanced Cropping**: A specialized model precisely segments the form from the background.
+                - **Common Form Model**: A dedicated model identifies field locations and specifically targets the signature area, which is handled separately from Gemini.
+                - **Gemini Validation & OCR**: The image is sent to Gemini to:
+                    1. Validate it's a correct, clear, and un-inverted form.
+                    2. Extract all text content simultaneously.
+                - **Smart Field Mapping**: 
+                    - Gemini extracts field names and the signature location (indexed via the Common Form model).
+                    - **Gemini Nano** is then used to map user input data to these specific fields.
+                    - The **Signature** is placed manually using the precise coordinates extracted by the system.
         `,
-        tags: ['YOLO', 'Gemini AI', 'Computer Vision', 'TTS', 'Real-time'],
+        tags: ['FastAPI', 'Celery', 'Redis', 'PostgreSQL', 'Docker', 'ONNX', 'YOLO', 'Gemini Nano', 'Computer Vision'],
         links: { github: null, demo: 'https://apps.apple.com/us/app/%D9%8A%D8%B3%D8%B1/id6752940380' },
         demoLabel: 'App Store',
-        images: []
+        images: [
+            screen1Img,
+            screen2Img,
+            scannerImg,
+            screen3Img,
+            screen4Img,
+            screen5Img,
+            formImg,
+            finalFormImg
+        ]
     },
     {
         id: 'atlas',

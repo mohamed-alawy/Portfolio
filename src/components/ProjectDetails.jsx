@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Github, ExternalLink, Code } from 'lucide-react'
@@ -9,6 +9,8 @@ const ProjectDetails = () => {
     const { id } = useParams()
     const project = projects.find(p => p.id === id)
 
+    const [selectedImage, setSelectedImage] = useState(null)
+
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
@@ -17,9 +19,7 @@ const ProjectDetails = () => {
         return (
             <div className="project-not-found">
                 <h2>Project Not Found</h2>
-                <Link to="/" className="back-link">
-                    <ArrowLeft size={20} /> Back to Home
-                </Link>
+                <Link to="/" className="btn btn-primary">Back to Home</Link>
             </div>
         )
     }
@@ -42,13 +42,13 @@ const ProjectDetails = () => {
 
                     <div className="project-actions">
                         {project.links.github && (
-                            <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                                <Github size={20} /> View Code
+                            <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                                <Github size={20} /> GitHub Repo
                             </a>
                         )}
                         {project.links.demo && (
-                            <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-                                <ExternalLink size={20} /> {project.demoLabel || "Live Demo"}
+                            <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                                <ExternalLink size={20} /> {project.demoLabel || 'Live Demo'}
                             </a>
                         )}
                     </div>
@@ -86,7 +86,9 @@ const ProjectDetails = () => {
                                 <p>{project.description}</p>
                             )}
                         </div>
+                    </div>
 
+                    <div className="project-sidebar">
                         <div className="tech-stack-section">
                             <h3>Technologies Used</h3>
                             <div className="tech-tags">
@@ -95,23 +97,32 @@ const ProjectDetails = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
 
-                    <div className="project-gallery">
-                        {project.images && project.images.length > 0 ? (
-                            project.images.map((img, index) => (
-                                <div key={index} className="gallery-item">
-                                    <img src={img} alt={`${project.title} screenshot ${index + 1}`} />
-                                </div>
-                            ))
-                        ) : (
-                            <div className="gallery-placeholder">
-                                <Code size={60} strokeWidth={1} />
-                                <p>Project Screenshots Coming Soon</p>
-                            </div>
-                        )}
+                        {/* Can add more sidebar items here later like links if we want to move them from header */}
                     </div>
                 </div>
+
+                {project.images && project.images.length > 0 && (
+                    <div className="project-gallery-section">
+                        <h3>Project Gallery</h3>
+                        <div className="project-gallery">
+                            {project.images.map((img, index) => (
+                                <div key={index} className="gallery-item" onClick={() => setSelectedImage(img)}>
+                                    <img src={img} alt={`${project.title} screenshot ${index + 1}`} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Image Modal */}
+                {selectedImage && (
+                    <div className="image-modal" onClick={() => setSelectedImage(null)}>
+                        <div className="modal-content">
+                            <img src={selectedImage} alt="Full size view" />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
