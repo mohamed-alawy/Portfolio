@@ -1,0 +1,105 @@
+.about-section {
+    padding: 6rem 2rem;
+    background-color: var(--bg-main);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.about-text {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Markdown Element Styles */
+.about-text p {
+    margin-bottom: 1.5rem;
+}
+
+.about-text strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.about-text a {
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.about-text a:hover {
+    border-bottom-color: var(--primary);
+}
+
+.about-text ul,
+.about-text ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.about-text li {
+    margin-bottom: 0.5rem;
+}
+
+.about-text h1,
+.about-text h2,
+.about-text h3 {
+    color: var(--text-main);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.about-text h1 {
+    font-size: 2rem;
+}
+
+.about-text h2 {
+    font-size: 1.5rem;
+}
+
+.about-text h3 {
+    font-size: 1.25rem;
+}
+
+/* Blockquote style */
+.about-text blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--text-main);
+    margin: 1.5rem 0;
+}
+
+/* Background Effect */
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.03) 0%, transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .about-text {
+        font-size: 1rem;
+    }
+}

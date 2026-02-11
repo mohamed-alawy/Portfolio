@@ -1,0 +1,182 @@
+from sqlmodel import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.project import Project
+from app.models.portfolio import (
+    Experience, Certification, About
+)
+
+
+SEED_PROJECTS = [
+    {
+        "title": "MedXpert",
+        "category": "Medical AI Diagnostic Platform",
+        "description": "Deep learning models for brain tumor segmentation (U-Net) and CNN classifiers for skin cancer & chest X-rays. Implemented data augmentation and transfer learning.",
+        "full_description": """MedXpert is a comprehensive medical diagnostic platform powered by advanced deep learning models. 
+It is designed to assist healthcare professionals in diagnosing various conditions with high accuracy.
+
+### Key Features:
+- **Brain Tumor Segmentation**: Utilizes U-Net architecture for precise segmentation of brain tumors from MRI scans.
+- **Skin Cancer Classification**: CNN-based classifier to distinguish between benign and malignant skin lesions.
+- **Chest X-Ray Analysis**: Automated detection of pneumonia and other chest abnormalities.
+- **User-Friendly Interface**: Intuitive web interface for uploading scans and visualizing results.""",
+        "tags": ["Python", "Deep Learning", "CNN", "U-Net", "Medical Imaging"],
+        "github_link": "https://github.com/mohamed-alawy/medxpert",
+        "demo_link": "#",
+        "demo_label": None,
+        "image_urls": [
+            "/api/v1/uploads/files/2.png",
+            "/api/v1/uploads/files/3.png",
+            "/api/v1/uploads/files/4.png",
+            "/api/v1/uploads/files/6.png",
+            "/api/v1/uploads/files/7.png",
+            "/api/v1/uploads/files/8.png",
+            "/api/v1/uploads/files/9.png",
+            "/api/v1/uploads/files/11.png",
+            "/api/v1/uploads/files/image_original.png",
+        ],
+    },
+    {
+        "title": "Yosr",
+        "category": "AI Accessibility Assistant",
+        "description": "Real-time form detection and filling assistant for visually impaired users. Features on-device ONNX models for detection & orientation, with a robust backend for processing, validation, and smart field mapping using Gemini & Gemini Nano.",
+        "full_description": """Yosr is an advanced accessibility application designed to help visually impaired individuals interact with physical forms independently.
+The system employs a hybrid architecture, combining fast on-device models for real-time guidance with powerful backend models for precise processing.
+
+### Technical Workflow:
+- **On-Device Real-time Analysis**: 
+    - Uses **two ONNX models** running locally on the app.
+    - **Model 1**: Detects forms in real-time.
+    - **Model 2**: Specific model to determine the orientation of the document.
+
+- **Backend Processing Pipeline**:
+    - **Advanced Cropping**: A specialized model precisely segments the form from the background.
+    - **Common Form Model**: A dedicated model identifies field locations and targets the signature area.
+    - **Gemini Validation & OCR**: The image is sent to Gemini for validation and text extraction.
+    - **Smart Field Mapping**: Gemini extracts field names; Gemini Nano maps user input data to fields.""",
+        "tags": ["FastAPI", "Celery", "Redis", "PostgreSQL", "Docker", "ONNX", "YOLO", "Gemini Nano", "Computer Vision"],
+        "github_link": None,
+        "demo_link": "https://apps.apple.com/us/app/%D9%8A%D8%B3%D8%B1/id6752940380",
+        "demo_label": "App Store",
+        "image_urls": [
+            "/api/v1/uploads/files/screen1.jpeg",
+            "/api/v1/uploads/files/screen2.jpeg",
+            "/api/v1/uploads/files/scanner.jpeg",
+            "/api/v1/uploads/files/screen3.jpeg",
+            "/api/v1/uploads/files/screen4.jpeg",
+            "/api/v1/uploads/files/screen5.jpeg",
+            "/api/v1/uploads/files/form.jpeg",
+            "/api/v1/uploads/files/final_form.jpeg",
+        ],
+    },
+    {
+        "title": "Atlas",
+        "category": "RAG Backend System",
+        "description": "High-performance RAG pipeline using FastAPI & Celery. Features async document processing (chunking -> embedding -> Vector DB), semantic search via PostgreSQL (pgvector), and scalable architecture with RabbitMQ & Redis.",
+        "full_description": """Atlas is a robust backend system designed for Retrieval-Augmented Generation (RAG) applications.
+It handles large-scale document processing and semantic search with efficiency and scalability.
+
+### Architecture:
+- **FastAPI**: High-performance web framework for the API layer.
+- **Celery & RabbitMQ**: Asynchronous task queue for handling heavy document processing jobs.
+- **Redis**: Caching layer to speed up frequent queries and manage task states.
+- **PostgreSQL & pgvector**: Vector database for storing embeddings and performing semantic similarity searches.
+
+### Capabilities:
+- **Document Ingestion**: Supports parsing and chunking of various document formats (PDF, DOCX, TXT).
+- **Embedding Generation**: Converting text chunks into vector embeddings using state-of-the-art models.
+- **Context-Aware Retrieval**: Retrieves the most relevant context for LLM queries to reduce hallucinations.""",
+        "tags": ["FastAPI", "Celery", "RabbitMQ", "Redis", "PostgreSQL", "Docker"],
+        "github_link": "https://github.com/mohamed-alawy/Atlas",
+        "demo_link": None,
+        "demo_label": None,
+        "image_urls": [],
+    },
+]
+
+SEED_EXPERIENCE = [
+    {
+        "title": "AI Accessibility Assistant Developer",
+        "company": "Yosr (Freelance)",
+        "period": "2025 - 2026",
+        "description": [
+            "Built a custom YOLO model for real-time document and currency detection.",
+            "Integrated Gemini-based AI for contextual understanding and text-to-speech feedback.",
+            "Optimized the AI inference pipeline to achieve sub-2s real-time response."
+        ]
+    },
+    {
+        "title": "Freelancing Trainee",
+        "company": "ITIDA Gigs / EYouth",
+        "period": "Jun - Sep 2025",
+        "description": [
+            "Mastered freelancing essentials: profile setup, proposals, portfolio, and financial management.",
+            "Enhanced communication and negotiation skills through expert sessions.",
+            "Successfully obtained first freelance project during training."
+        ]
+    },
+    {
+        "title": "AI Trainee",
+        "company": "National Telecommunication Institute (NTI)",
+        "period": "Aug 2025",
+        "description": [
+            "Mastered core ML and AI concepts using Python.",
+            "Developed and trained ML models for classification and prediction.",
+            "Gained hands-on experience in Computer Vision and introductory NLP."
+        ]
+    }
+]
+
+SEED_CERTIFICATIONS = [
+    {
+        "title": "ITIDA Gigs Freelancing Program (AI & Freelancing Skills)",
+        "issuer": "ITIDA & EYouth",
+        "date": "Jun 2025 - Sep 2025",
+        "link": "https://media.licdn.com/dms/document/media/v2/D4E1FAQFsYjFFCVITbw/feedshare-document-sanitized-pdf/B4EZlo62TjKgA8-/0/1758401885950?e=1771369200&v=beta&t=hVfNXPy3JOYwGOM_cLlECqEg70slH55k93M1azk_NPM",
+        "description": "Completed an intensive 3-month program covering freelancing essentials: profile setup, proposals, portfolio creation, and financial management. Successfully launched freelance career and obtained first gig."
+    },
+    {
+        "title": "AI Intern",
+        "issuer": "National Telecommunication Institute (NTI)",
+        "date": "Aug 2025 (1 mo)",
+        "link": "https://media.licdn.com/dms/document/media/v2/D4E1FAQEERhbjpmEdow/feedshare-document-sanitized-pdf/B4EZjH3.z6GYBA-/0/1755700001402?e=1771369200&v=beta&t=oYGRvL5sWH6QYGd_Uh91GjIQxqFhWASmUKfc3ZegtBM",
+        "description": "Completed an intensive AI training program, mastering core concepts of Artificial Intelligence, Machine Learning, Computer Vision, and NLP using Python. Developed classification and prediction models with real-world datasets."
+    }
+]
+
+SEED_ABOUT_CONTENT = """I’m Mohamed Usama, an AI freelancer with over 7 years of freelance experience and 2+ years solving real-world AI problems.
+I love turning challenging tasks into smart, practical solutions, whether it’s **Computer Vision, NLP, RAG, or AI agents**.
+
+With a strong ability to understand clients quickly and communicate ideas clearly, I make sure every project flows smoothly from concept to delivery.
+New challenges excite me - they push me to research, experiment, and deliver results that really work."""
+
+
+async def seed_projects(session: AsyncSession):
+    """Seed the database with initial portfolio data if empty."""
+    # Seed Projects
+    result = await session.execute(select(Project))
+    if len(result.scalars().all()) == 0:
+        for p in SEED_PROJECTS:
+            session.add(Project(**p))
+        print(f"Seeded {len(SEED_PROJECTS)} projects.")
+
+    # Seed Experience
+    result = await session.execute(select(Experience))
+    if len(result.scalars().all()) == 0:
+        for e in SEED_EXPERIENCE:
+            session.add(Experience(**e))
+        print(f"Seeded {len(SEED_EXPERIENCE)} experiences.")
+
+    # Seed Certifications
+    result = await session.execute(select(Certification))
+    if len(result.scalars().all()) == 0:
+        for c in SEED_CERTIFICATIONS:
+            session.add(Certification(**c))
+        print(f"Seeded {len(SEED_CERTIFICATIONS)} certifications.")
+
+    # Seed About
+    result = await session.execute(select(About))
+    if not result.scalars().first():
+        session.add(About(content=SEED_ABOUT_CONTENT))
+        print("Seeded About content.")
+
+    await session.commit()
