@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MessageCircle, X, Send, Bot, User, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import API_BASE from '../config'
+import API_BASE, { getImageUrl } from '../config'
 import '../styles/Chatbot.css'
 
-const chatBotImage = '/images/chatBot.png'
+const chatBotImage = '/uploads/chatBot.png'
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -250,7 +250,7 @@ const Chatbot = () => {
                             <X size={24} />
                         </div>
                     ) : (
-                        <img src={chatBotImage} alt="Chat with me" className="chatbot-avatar" />
+                        <img src={getImageUrl(chatBotImage)} alt="Chat with me" className="chatbot-avatar" />
                     )}
                 </motion.button>
             </div>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Github, ExternalLink, Code } from 'lucide-react'
 import '../styles/ProjectDetails.css'
 
-import API_BASE from '../config'
+import API_BASE, { getImageUrl } from '../config'
 
 const ProjectDetails = () => {
     const { id } = useParams()
@@ -128,7 +128,7 @@ const ProjectDetails = () => {
                         <div className="project-gallery">
                             {images.map((img, index) => (
                                 <div key={index} className="gallery-item" onClick={() => setSelectedImage(img)}>
-                                    <img src={img} alt={`${project.title} screenshot ${index + 1}`} />
+                                    <img src={getImageUrl(img)} alt={`${project.title} screenshot ${index + 1}`} />
                                 </div>
                             ))}
                         </div>
@@ -138,8 +138,8 @@ const ProjectDetails = () => {
                 {/* Image Modal */}
                 {selectedImage && (
                     <div className="image-modal" onClick={() => setSelectedImage(null)}>
-                        <div className="modal-content">
-                            <img src={selectedImage} alt="Full size view" />
+                        <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <img src={getImageUrl(selectedImage)} alt="Project fullscreen" />
                         </div>
                     </div>
                 )}

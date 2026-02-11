@@ -3,7 +3,9 @@ import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail, FileText } from 'lucide-react'
 import '../styles/Hero.css'
 
-const heroImage = '/images/my_photo.png'
+import { getImageUrl } from '../config'
+
+const heroImage = '/uploads/my_photo.png'
 
 const Hero = () => {
     return (
@@ -67,7 +69,7 @@ const Hero = () => {
                     className="hero-image-wrapper"
                 >
                     <div className="hero-gradient-bg"></div>
-                    <img src={heroImage} alt="Mohamed Alawy" className="hero-img" />
+                    <img src={getImageUrl(heroImage)} alt="Mohamed Alawy" className="hero-img" />
                 </motion.div>
             </div>
         </section>

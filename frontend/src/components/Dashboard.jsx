@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink } from 'lucide-react'
 import '../styles/Dashboard.css'
 
-import API_BASE from '../config'
+import API_BASE, { getImageUrl } from '../config'
 
 const Dashboard = ({ token, onLogout }) => {
     const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {}
@@ -442,7 +442,7 @@ const Dashboard = ({ token, onLogout }) => {
                                                         onDragOver={handleDragOver}
                                                         onDrop={() => handleDrop(index)}
                                                     >
-                                                        <img src={img.url.startsWith('/') ? `http://localhost:8000${img.url}` : img.url} alt={`Project ${index + 1}`} />
+                                                        <img src={getImageUrl(img.url)} alt={`Project ${index + 1}`} />
                                                         <div className="image-overlay">
                                                             <span className="image-order">
                                                                 <GripVertical size={12} /> {index + 1}
@@ -479,7 +479,7 @@ const Dashboard = ({ token, onLogout }) => {
                                             {(project.image_urls || []).length > 0 && (
                                                 <img
                                                     className="project-thumb"
-                                                    src={project.image_urls[0].startsWith('/') ? `http://localhost:8000${project.image_urls[0]}` : project.image_urls[0]}
+                                                    src={getImageUrl(project.image_urls[0])}
                                                     alt={project.title}
                                                 />
                                             )}
