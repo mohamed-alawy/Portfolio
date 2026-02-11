@@ -14,6 +14,7 @@ import Chatbot from './components/Chatbot'
 import AdminPage from './components/AdminPage'
 
 import ScrollToTop from './components/ScrollToTop'
+import ScrollToSection from './components/ScrollToSection'
 import SkeletonLoader from './components/SkeletonLoader'
 import { getImageUrl } from './config'
 
@@ -74,6 +75,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <ScrollToSection />
       <div className="App">
         <Navbar theme={theme} toggleTheme={toggleTheme} />
         <Routes>

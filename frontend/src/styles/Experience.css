@@ -163,7 +163,8 @@
     }
 
     .timeline-item::after {
-        left: 23px;
+        left: 21px;
+        /* Center of dot (31px center line - 10px half width) */
         right: auto;
     }
 
