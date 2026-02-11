@@ -38,14 +38,8 @@ const Projects = () => {
                             viewport={{ once: true }}
                             className="project-card"
                         >
-                            <div className="project-image-container">
-                                {project.image_urls && project.image_urls.length > 0 ? (
-                                    <img src={getImageUrl(project.image_urls[0])} alt={project.title} className="project-card-img" />
-                                ) : (
-                                    <div className="project-icon-fallback">
-                                        <Code size={40} strokeWidth={1.5} />
-                                    </div>
-                                )}
+                            <div className="project-icon">
+                                <Code size={40} strokeWidth={1.5} />
                             </div>
                             <Link to={`/project/${project.id}`} className="project-link-wrapper" style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <h3 className="project-title">{project.title} <ArrowRight size={16} className="arrow-icon" /></h3>

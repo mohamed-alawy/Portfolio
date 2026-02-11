@@ -151,20 +151,13 @@ New challenges excite me - they push me to research, experiment, and deliver res
 
 
 async def seed_projects(session: AsyncSession):
-    """Wipe and re-seed all portfolio data to fix URLs and IDs."""
-    from sqlalchemy import delete
-    
-    # Wipe existing data to force fresh IDs and URLs
-    await session.execute(delete(Project))
-    await session.execute(delete(Experience))
-    await session.execute(delete(Certification))
-    await session.execute(delete(About))
-    await session.commit()
-
-    # Re-seed Projects
-    for p in SEED_PROJECTS:
-        session.add(Project(**p))
-    print(f"Freshly seeded {len(SEED_PROJECTS)} projects.")
+    """Seed the database with initial portfolio data if empty."""
+    # Seed Projects
+    result = await session.execute(select(Project))
+    if len(result.scalars().all()) == 0:
+        for p in SEED_PROJECTS:
+            session.add(Project(**p))
+        print(f"Seeded {len(SEED_PROJECTS)} projects.")
 
     # Seed Experience
     result = await session.execute(select(Experience))

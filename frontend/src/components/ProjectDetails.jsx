@@ -42,9 +42,7 @@ const ProjectDetails = () => {
     }
 
     // Build full image URLs
-    const images = (project.image_urls || []).map(url =>
-        url.startsWith('/') ? `http://localhost:8000${url}` : url
-    )
+    const images = (project.image_urls || []).map(url => getImageUrl(url))
 
     return (
         <div className="project-details-page">
