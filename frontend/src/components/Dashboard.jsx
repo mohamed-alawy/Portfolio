@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink } from 'lucide-react'
+import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink, Bot } from 'lucide-react'
 import '../styles/Dashboard.css'
 
 import API_BASE, { getImageUrl } from '../config'
@@ -38,6 +38,9 @@ const Dashboard = ({ token, onLogout }) => {
     const [editingCert, setEditingCert] = useState(null)
     const [certForm, setCertForm] = useState({ title: '', issuer: '', date: '', link: '', description: '' })
 
+    // Chatbot Settings
+    const [chatbotSettings, setChatbotSettings] = useState({ is_active: true, inactive_message: '' })
+
     useEffect(() => {
         if (activeTab === 'documents') fetchDocuments()
         if (activeTab === 'messages') fetchMessages()
@@ -45,7 +48,28 @@ const Dashboard = ({ token, onLogout }) => {
         if (activeTab === 'about') fetchAbout()
         if (activeTab === 'experience') fetchExperience()
         if (activeTab === 'certifications') fetchCertifications()
+        if (activeTab === 'chatbot') fetchChatbotSettings()
     }, [activeTab, token])
+
+    // --- Chatbot Settings ---
+    const fetchChatbotSettings = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/chatbot-settings`, { headers: authHeaders })
+            const data = await res.json()
+            setChatbotSettings(data)
+        } catch (err) { console.error(err) }
+    }
+
+    const updateChatbotSettings = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/chatbot-settings`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify(chatbotSettings)
+            })
+            if (res.ok) alert('Chatbot settings updated!')
+        } catch (err) { console.error(err) }
+    }
 
     // --- About ---
     const fetchAbout = async () => {
@@ -339,6 +363,9 @@ const Dashboard = ({ token, onLogout }) => {
                     </button>
                     <button className={`tab-btn ${activeTab === 'certifications' ? 'active' : ''}`} onClick={() => setActiveTab('certifications')}>
                         <Award size={18} /> Certifications
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'chatbot' ? 'active' : ''}`} onClick={() => setActiveTab('chatbot')}>
+                        <Bot size={18} /> Chatbot
                     </button>
                 </div>
 
@@ -708,6 +735,53 @@ const Dashboard = ({ token, onLogout }) => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/* ===================== Chatbot Settings Tab ===================== */}
+                {activeTab === 'chatbot' && (
+                    <div className="tab-content">
+                        <h3>Chatbot Configuration</h3>
+
+                        <div className="project-form-card">
+                            <div className="form-row" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                                <div className="toggle-switch">
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={chatbotSettings.is_active}
+                                            onChange={() => {
+                                                const newSettings = { ...chatbotSettings, is_active: !chatbotSettings.is_active }
+                                                setChatbotSettings(newSettings)
+                                            }}
+                                            style={{ width: '20px', height: '20px' }}
+                                        />
+                                        Enable Chatbot
+                                    </label>
+                                </div>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                    {chatbotSettings.is_active ? 'Chatbot is online and answering users.' : 'Chatbot is offline.'}
+                                </span>
+                            </div>
+
+                            <div style={{ marginBottom: '1.5rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-main)' }}>Offline Message</label>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                                    This message will be sent immediately when a user tries to chat while the bot is disabled.
+                                </p>
+                                <textarea
+                                    className="about-textarea"
+                                    value={chatbotSettings.inactive_message}
+                                    onChange={e => setChatbotSettings({ ...chatbotSettings, inactive_message: e.target.value })}
+                                    rows={3}
+                                    style={{ minHeight: '100px' }}
+                                />
+                            </div>
+
+                            <button className="save-btn" onClick={updateChatbotSettings}>
+                                <Save size={16} /> Save Settings
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>

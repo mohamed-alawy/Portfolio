@@ -48,3 +48,18 @@ class AboutCreate(AboutBase):
 
 class AboutRead(AboutBase):
     id: int
+
+# ---
+
+class ChatbotSettingsBase(SQLModel):
+    is_active: bool = Field(default=True)
+    inactive_message: str = Field(default="I am currently offline. Please contact me via email.")
+
+class ChatbotSettings(ChatbotSettingsBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+class ChatbotSettingsCreate(ChatbotSettingsBase):
+    pass
+
+class ChatbotSettingsRead(ChatbotSettingsBase):
+    id: int

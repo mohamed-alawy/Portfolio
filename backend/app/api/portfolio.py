@@ -7,7 +7,8 @@ from app.core.db import get_session
 from app.models.portfolio import (
     Experience, ExperienceCreate, ExperienceRead,
     Certification, CertificationCreate, CertificationRead,
-    About, AboutCreate, AboutRead
+    About, AboutCreate, AboutRead,
+    ChatbotSettings, ChatbotSettingsCreate, ChatbotSettingsRead
 )
 
 router = APIRouter()
@@ -110,6 +111,36 @@ async def update_about(item: AboutCreate, session: AsyncSession = Depends(get_se
         session.add(db_item)
     else:
         db_item.content = item.content
+        session.add(db_item)
+    
+    await session.commit()
+    await session.refresh(db_item)
+    return db_item
+
+
+# --- Chatbot Settings ---
+
+@router.get("/chatbot-settings", response_model=ChatbotSettingsRead)
+async def read_chatbot_settings(session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(ChatbotSettings))
+    settings = result.scalars().first()
+    if not settings:
+        settings = ChatbotSettings(is_active=True, inactive_message="I am currently offline. Please contact me via email.")
+        session.add(settings)
+        await session.commit()
+        await session.refresh(settings)
+    return settings
+
+@router.put("/chatbot-settings", response_model=ChatbotSettingsRead)
+async def update_chatbot_settings(item: ChatbotSettingsCreate, session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(ChatbotSettings))
+    db_item = result.scalars().first()
+    if not db_item:
+        db_item = ChatbotSettings(is_active=item.is_active, inactive_message=item.inactive_message)
+        session.add(db_item)
+    else:
+        db_item.is_active = item.is_active
+        db_item.inactive_message = item.inactive_message
         session.add(db_item)
     
     await session.commit()
