@@ -27,7 +27,7 @@ async def upload_image(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         f.write(content)
 
-    return {"filename": unique_name, "url": f"/api/v1/uploads/files/{unique_name}"}
+    return {"filename": unique_name, "url": f"/api/v1/uploads/{unique_name}"}
 
 
 @router.post("/images")
@@ -43,7 +43,7 @@ async def upload_multiple_images(files: List[UploadFile] = File(...)):
         content = await file.read()
         with open(file_path, "wb") as f:
             f.write(content)
-        results.append({"filename": unique_name, "url": f"/api/v1/uploads/files/{unique_name}"})
+        results.append({"filename": unique_name, "url": f"/api/v1/uploads/{unique_name}"})
     return results
 
 
