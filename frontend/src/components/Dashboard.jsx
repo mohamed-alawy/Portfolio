@@ -963,9 +963,8 @@ const Dashboard = ({ token, onLogout }) => {
                                         <input placeholder="Category (e.g. Frontend)" value={skillForm.category} onChange={e => setSkillForm({ ...skillForm, category: e.target.value })} required />
                                     </div>
                                     <div className="form-row">
-                                        <input type="number" placeholder="Proficiency (0-100)" value={skillForm.proficiency || ''} onChange={e => setSkillForm({ ...skillForm, proficiency: e.target.value })} />
                                         <select value={skillForm.icon || ''} onChange={e => setSkillForm({ ...skillForm, icon: e.target.value })}>
-                                            <option value="">Select Icon</option>
+                                            <option value="">Select Icon (Optional)</option>
                                             <option value="Code">Code</option>
                                             <option value="Cpu">Cpu</option>
                                             <option value="Eye">Eye</option>
