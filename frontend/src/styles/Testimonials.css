@@ -1,6 +1,6 @@
 .testimonials-section {
     padding: 5rem 2rem;
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-main);
     overflow: hidden;
     border-top: 1px solid var(--border-color);
 }
@@ -20,7 +20,7 @@
 }
 
 .testimonial-card {
-    background: var(--bg-main);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 2rem;

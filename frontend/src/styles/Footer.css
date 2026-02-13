@@ -1,5 +1,5 @@
 .footer {
-    background-color: var(--bg-main);
+    background-color: var(--bg-secondary);
     padding: 4rem 2rem 2rem;
     border-top: 1px solid var(--border-color);
 }
