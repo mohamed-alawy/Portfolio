@@ -11,10 +11,18 @@ const Testimonials = () => {
         const fetchTestimonials = async () => {
             try {
                 const res = await fetch(`${API_BASE}/testimonials`)
+                if (!res.ok) throw new Error('Failed to fetch')
+
                 const data = await res.json()
-                setTestimonials(data)
+                if (Array.isArray(data)) {
+                    setTestimonials(data)
+                } else {
+                    console.error("Testimonials data is not an array:", data)
+                    setTestimonials([])
+                }
             } catch (err) {
                 console.error("Failed to fetch testimonials", err)
+                setTestimonials([])
             }
         }
         fetchTestimonials()

@@ -23,7 +23,15 @@ const Skills = () => {
         const fetchSkills = async () => {
             try {
                 const res = await fetch(`${API_BASE}/skills`)
+                if (!res.ok) throw new Error('Failed to fetch skills')
+
                 const data = await res.json()
+
+                if (!Array.isArray(data)) {
+                    console.warn("Skills data is not an array, setting empty:", data)
+                    setSkillsData([])
+                    return
+                }
 
                 // Group by category
                 const grouped = data.reduce((acc, skill) => {
@@ -41,6 +49,7 @@ const Skills = () => {
                 setSkillsData(Object.values(grouped))
             } catch (err) {
                 console.error("Failed to fetch skills", err)
+                setSkillsData([])
             } finally {
                 setLoading(false)
             }
