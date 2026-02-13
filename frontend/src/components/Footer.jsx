@@ -113,11 +113,6 @@ const Footer = () => {
                                     <Mail size={20} /> {contactInfo.email}
                                 </a>
                             )}
-                            {contactInfo?.phone && (
-                                <a href={`tel:${contactInfo.phone}`} className="social-link">
-                                    <Phone size={20} /> {contactInfo.phone}
-                                </a>
-                            )}
                             {contactInfo?.github && (
                                 <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="social-link">
                                     <Github size={20} /> GitHub
@@ -128,9 +123,23 @@ const Footer = () => {
                                     <Linkedin size={20} /> LinkedIn
                                 </a>
                             )}
+                            {contactInfo?.whatsapp && (
+                                <a href={`https://wa.me/${contactInfo.whatsapp.replace('+', '')}`} target="_blank" rel="noopener noreferrer" className="social-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                        <path d="M9 10a.5 .5 0 0 0 1 0V9a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
+                                    </svg>
+                                    WhatsApp
+                                </a>
+                            )}
                             {contactInfo?.twitter && (
                                 <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="social-link">
                                     <Twitter size={20} /> Twitter
+                                </a>
+                            )}
+                            {contactInfo?.phone && (
+                                <a href={`tel:${contactInfo.phone}`} className="social-link">
+                                    <Phone size={20} /> {contactInfo.phone}
                                 </a>
                             )}
                             {contactInfo?.location && (

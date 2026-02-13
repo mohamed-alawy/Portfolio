@@ -1088,11 +1088,14 @@ const Dashboard = ({ token, onLogout }) => {
                                     <input placeholder="Phone" value={contactInfo.phone || ''} onChange={e => setContactInfo({ ...contactInfo, phone: e.target.value })} />
                                 </div>
                                 <div className="form-row">
+                                    <input placeholder="WhatsApp (+20...)" value={contactInfo.whatsapp || ''} onChange={e => setContactInfo({ ...contactInfo, whatsapp: e.target.value })} />
                                     <input placeholder="GitHub URL" value={contactInfo.github || ''} onChange={e => setContactInfo({ ...contactInfo, github: e.target.value })} />
-                                    <input placeholder="LinkedIn URL" value={contactInfo.linkedin || ''} onChange={e => setContactInfo({ ...contactInfo, linkedin: e.target.value })} />
                                 </div>
                                 <div className="form-row">
+                                    <input placeholder="LinkedIn URL" value={contactInfo.linkedin || ''} onChange={e => setContactInfo({ ...contactInfo, linkedin: e.target.value })} />
                                     <input placeholder="Twitter/X URL" value={contactInfo.twitter || ''} onChange={e => setContactInfo({ ...contactInfo, twitter: e.target.value })} />
+                                </div>
+                                <div className="form-row">
                                     <input placeholder="Location" value={contactInfo.location || ''} onChange={e => setContactInfo({ ...contactInfo, location: e.target.value })} />
                                 </div>
                                 <button type="submit" className="save-btn">

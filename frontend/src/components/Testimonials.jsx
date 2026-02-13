@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Star } from 'lucide-react'
+import { Star, ExternalLink } from 'lucide-react'
 import API_BASE from '../config'
 import '../styles/Testimonials.css'
 
@@ -71,9 +71,18 @@ const Testimonials = () => {
                                 )}
                                 <div className="testimonial-info">
                                     {testimonial.link ? (
-                                        <a href={testimonial.link} target="_blank" rel="noopener noreferrer" className="testimonial-namelink">
-                                            <h4>{testimonial.name} 🔗</h4>
-                                        </a>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <h4>{testimonial.name}</h4>
+                                            <a
+                                                href={testimonial.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="testimonial-link-icon"
+                                                title="View Source"
+                                            >
+                                                <ExternalLink size={16} />
+                                            </a>
+                                        </div>
                                     ) : (
                                         <h4>{testimonial.name}</h4>
                                     )}

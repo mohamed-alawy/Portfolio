@@ -147,7 +147,8 @@ SEED_CERTIFICATIONS = [
 
 SEED_CONTACT_INFO = {
     "email": "mohamed.alawy.21@gmail.com",
-    "phone": "+201009283969",
+    "phone": None,
+    "whatsapp": "+201009283969",
     "github": "https://github.com/mohamed-alawy",
     "linkedin": "https://www.linkedin.com/in/mohamed-alawy/",
     "twitter": None,
@@ -272,14 +273,26 @@ async def seed_projects(session: AsyncSession):
 
     # Seed Contact Info
     result = await session.execute(select(ContactInfo))
-    if not result.scalars().first():
+    existing_contact = result.scalars().first()
+    if not existing_contact:
         session.add(ContactInfo(**SEED_CONTACT_INFO))
         print("Seeded Contact Info.")
+    elif not existing_contact.email:  # If exists but empty (auto-created by API), update it
+        for k, v in SEED_CONTACT_INFO.items():
+            setattr(existing_contact, k, v)
+        session.add(existing_contact)
+        print("Updated empty Contact Info with seed data.")
 
     # Seed CV
     result = await session.execute(select(CV))
-    if not result.scalars().first():
+    existing_cv = result.scalars().first()
+    if not existing_cv:
         session.add(CV(**SEED_CV))
         print("Seeded CV details.")
+    elif not existing_cv.file_url: # If exists but empty
+        for k, v in SEED_CV.items():
+            setattr(existing_cv, k, v)
+        session.add(existing_cv)
+        print("Updated empty CV with seed data.")
 
     await session.commit()

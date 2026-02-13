@@ -106,6 +106,7 @@ class TestimonialRead(TestimonialBase):
 class ContactInfoBase(SQLModel):
     email: Optional[str] = None
     phone: Optional[str] = None
+    whatsapp: Optional[str] = None
     github: Optional[str] = None
     linkedin: Optional[str] = None
     twitter: Optional[str] = None
