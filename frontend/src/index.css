@@ -16,6 +16,8 @@
   /* Background Colors */
   --bg-main: #FFFFFF;
   --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  /* Slate 100 - Slightly darker than secondary */
   /* Light Gray */
   --bg-glass: rgba(255, 255, 255, 0.8);
 
@@ -34,6 +36,8 @@
   /* Dark Slate */
   --bg-secondary: #1E293B;
   /* Darker Slate */
+  --bg-tertiary: #020617;
+  /* Slate 950 - Even darker than main */
   --bg-glass: rgba(15, 23, 42, 0.8);
   --border-color: #334155;
 }

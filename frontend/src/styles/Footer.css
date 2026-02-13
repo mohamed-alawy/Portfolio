@@ -1,5 +1,5 @@
 .footer {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-tertiary);
     padding: 4rem 2rem 2rem;
     border-top: 1px solid var(--border-color);
 }
@@ -88,6 +88,16 @@
     padding: 0.8rem 2rem;
     font-size: 1rem;
     width: fit-content;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cta-btn:hover {
+    background-color: var(--primary-dark);
 }
 
 .cta-btn:disabled {
