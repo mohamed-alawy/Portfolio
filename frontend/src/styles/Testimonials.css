@@ -1,9 +1,8 @@
 .testimonials-section {
     padding: 5rem 2rem;
-    background-color: var(--bg-main);
+    background-color: var(--bg-secondary);
     overflow: hidden;
     border-top: 1px solid var(--border-color);
-    /* Added border for extra separation */
 }
 
 .testimonials-container {
@@ -21,18 +20,20 @@
 }
 
 .testimonial-card {
-    background: var(--bg-card);
+    background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: auto;
     flex: 1 1 300px;
     max-width: 400px;
+    position: relative;
+    overflow: hidden;
 }
 
 .testimonial-card:hover {

@@ -53,13 +53,10 @@ const Testimonials = () => {
                         <motion.div
                             key={testimonial.id}
                             className={`testimonial-card ${testimonial.language === 'ar' ? 'ar' : ''}`}
-                            initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
-                            whileInView={{ opacity: 1, scale: 1, rotate: getRotation(index) }}
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            whileInView={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            style={{
-                                transform: `rotate(${getRotation(index)}deg)`, // Fallback for CSS
-                            }}
                         >
                             <div className="testimonial-header">
                                 {testimonial.avatar_url ? (
