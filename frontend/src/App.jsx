@@ -9,6 +9,7 @@ import Projects from './components/Projects'
 import ProjectDetails from './components/ProjectDetails'
 import Skills from './components/Skills'
 import Certifications from './components/Certifications'
+import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
 import AdminPage from './components/AdminPage'
@@ -88,6 +89,7 @@ function App() {
               <Projects />
               <Skills />
               <Certifications />
+              <Testimonials />
             </main>
           } />
           <Route path="/project/:id" element={<ProjectDetails />} />

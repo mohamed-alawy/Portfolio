@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Github, Linkedin, Mail, FileText, Send } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Github, Linkedin, Mail, FileText, Send, Phone, Twitter, MapPin } from 'lucide-react'
 import '../styles/Footer.css'
 
 import API_BASE from '../config'
@@ -8,6 +8,25 @@ const Footer = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' })
     const [sending, setSending] = useState(false)
     const [status, setStatus] = useState('')
+
+    const [contactInfo, setContactInfo] = useState(null)
+    const [cv, setCv] = useState(null)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [contactRes, cvRes] = await Promise.all([
+                    fetch(`${API_BASE}/contact-info`),
+                    fetch(`${API_BASE}/cv`)
+                ])
+                if (contactRes.ok) setContactInfo(await contactRes.json())
+                if (cvRes.ok) setCv(await cvRes.json())
+            } catch (err) {
+                console.error("Failed to fetch footer data", err)
+            }
+        }
+        fetchData()
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -89,25 +108,42 @@ const Footer = () => {
                     <div className="quick-links-section">
                         <h3>Connect with me</h3>
                         <div className="footer-socials-vertical">
-                            <a href="mailto:mohamed.alawy.21@gmail.com" className="social-link">
-                                <Mail size={20} /> mohamed.alawy.21@gmail.com
-                            </a>
-                            <a href="https://github.com/mohamed-alawy" target="_blank" rel="noopener noreferrer" className="social-link">
-                                <Github size={20} /> GitHub
-                            </a>
-                            <a href="https://www.linkedin.com/in/mohamed-alawy/" target="_blank" rel="noopener noreferrer" className="social-link">
-                                <Linkedin size={20} /> LinkedIn
-                            </a>
-                            <a href="https://wa.me/201009283969" target="_blank" rel="noopener noreferrer" className="social-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                                    <path d="M9 10a.5 .5 0 0 0 1 0V9a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
-                                </svg>
-                                WhatsApp
-                            </a>
-                            <a href="https://drive.google.com/file/d/1RLbofdD-xzom2KSFTjKeGq6ztNg6u85A/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="social-link">
-                                <FileText size={20} /> Resume / CV
-                            </a>
+                            {contactInfo?.email && (
+                                <a href={`mailto:${contactInfo.email}`} className="social-link">
+                                    <Mail size={20} /> {contactInfo.email}
+                                </a>
+                            )}
+                            {contactInfo?.phone && (
+                                <a href={`tel:${contactInfo.phone}`} className="social-link">
+                                    <Phone size={20} /> {contactInfo.phone}
+                                </a>
+                            )}
+                            {contactInfo?.github && (
+                                <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="social-link">
+                                    <Github size={20} /> GitHub
+                                </a>
+                            )}
+                            {contactInfo?.linkedin && (
+                                <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">
+                                    <Linkedin size={20} /> LinkedIn
+                                </a>
+                            )}
+                            {contactInfo?.twitter && (
+                                <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="social-link">
+                                    <Twitter size={20} /> Twitter
+                                </a>
+                            )}
+                            {contactInfo?.location && (
+                                <div className="social-link" style={{ cursor: 'default' }}>
+                                    <MapPin size={20} /> {contactInfo.location}
+                                </div>
+                            )}
+
+                            {cv?.file_url && (
+                                <a href={cv.file_url} target="_blank" rel="noopener noreferrer" className="social-link highlight-link">
+                                    <FileText size={20} /> Resume / CV <span style={{ fontSize: '0.8em', opacity: 0.8 }}>({cv.updated_at})</span>
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -119,5 +155,6 @@ const Footer = () => {
         </footer>
     )
 }
+
 
 export default Footer

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink, Bot } from 'lucide-react'
+import { Upload, FileText, Trash2, MessageSquare, FolderOpen, CheckCircle, Plus, Edit3, X, Save, LogOut, Image, GripVertical, User, Briefcase, Award, ExternalLink, Bot, Code, Star, Phone, File } from 'lucide-react'
 import '../styles/Dashboard.css'
 
 import API_BASE, { getImageUrl } from '../config'
@@ -41,6 +41,24 @@ const Dashboard = ({ token, onLogout }) => {
     // Chatbot Settings
     const [chatbotSettings, setChatbotSettings] = useState({ is_active: true, inactive_message: '' })
 
+    // Skills
+    const [skills, setSkills] = useState([])
+    const [showSkillForm, setShowSkillForm] = useState(false)
+    const [editingSkill, setEditingSkill] = useState(null)
+    const [skillForm, setSkillForm] = useState({ name: '', category: '', proficiency: '', icon: '' })
+
+    // Testimonials
+    const [testimonials, setTestimonials] = useState([])
+    const [showTestimonialForm, setShowTestimonialForm] = useState(false)
+    const [editingTestimonial, setEditingTestimonial] = useState(null)
+    const [testimonialForm, setTestimonialForm] = useState({ name: '', role: '', content: '', rating: 5, avatar_url: '', language: 'en' })
+
+    // Contact Info
+    const [contactInfo, setContactInfo] = useState({ email: '', phone: '', github: '', linkedin: '', twitter: '', location: '' })
+
+    // CV
+    const [cv, setCV] = useState({ file_url: '', updated_at: '' })
+
     useEffect(() => {
         if (activeTab === 'documents') fetchDocuments()
         if (activeTab === 'messages') fetchMessages()
@@ -49,6 +67,10 @@ const Dashboard = ({ token, onLogout }) => {
         if (activeTab === 'experience') fetchExperience()
         if (activeTab === 'certifications') fetchCertifications()
         if (activeTab === 'chatbot') fetchChatbotSettings()
+        if (activeTab === 'skills') fetchSkills()
+        if (activeTab === 'testimonials') fetchTestimonials()
+        if (activeTab === 'contact') fetchContactInfo()
+        if (activeTab === 'cv') fetchCV()
     }, [activeTab, token])
 
     // --- Chatbot Settings ---
@@ -68,6 +90,124 @@ const Dashboard = ({ token, onLogout }) => {
                 body: JSON.stringify(chatbotSettings)
             })
             if (res.ok) alert('Chatbot settings updated!')
+        } catch (err) { console.error(err) }
+    }
+
+    // --- Skills ---
+    const fetchSkills = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/skills`, { headers: authHeaders })
+            setSkills(await res.json())
+        } catch (err) { console.error(err) }
+    }
+
+    const handleSkillSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const url = editingSkill ? `${API_BASE}/skills/${editingSkill}` : `${API_BASE}/skills`
+            const method = editingSkill ? 'PUT' : 'POST'
+            await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify(skillForm)
+            })
+            setShowSkillForm(false); setEditingSkill(null); setSkillForm({ name: '', category: '', proficiency: '', icon: '' })
+            fetchSkills()
+        } catch (err) { console.error(err) }
+    }
+
+    const deleteSkill = async (id) => {
+        if (!window.confirm('Delete this skill?')) return
+        try { await fetch(`${API_BASE}/skills/${id}`, { method: 'DELETE', headers: authHeaders }); fetchSkills() }
+        catch (err) { console.error(err) }
+    }
+
+    // --- Testimonials ---
+    const fetchTestimonials = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/testimonials`, { headers: authHeaders })
+            setTestimonials(await res.json())
+        } catch (err) { console.error(err) }
+    }
+
+    const handleTestimonialSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const url = editingTestimonial ? `${API_BASE}/testimonials/${editingTestimonial}` : `${API_BASE}/testimonials`
+            const method = editingTestimonial ? 'PUT' : 'POST'
+            await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify(testimonialForm)
+            })
+            setShowTestimonialForm(false); setEditingTestimonial(null);
+            setTestimonialForm({ name: '', role: '', content: '', rating: 5, avatar_url: '', language: 'en' })
+            fetchTestimonials()
+        } catch (err) { console.error(err) }
+    }
+
+    const deleteTestimonial = async (id) => {
+        if (!window.confirm('Delete this testimonial?')) return
+        try { await fetch(`${API_BASE}/testimonials/${id}`, { method: 'DELETE', headers: authHeaders }); fetchTestimonials() }
+        catch (err) { console.error(err) }
+    }
+
+    // --- Contact Info ---
+    const fetchContactInfo = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/contact-info`, { headers: authHeaders })
+            setContactInfo(await res.json())
+        } catch (err) { console.error(err) }
+    }
+
+    const updateContactInfo = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch(`${API_BASE}/contact-info`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify(contactInfo)
+            })
+            if (res.ok) alert('Contact info updated!')
+        } catch (err) { console.error(err) }
+    }
+
+    // --- CV ---
+    const fetchCV = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/cv`, { headers: authHeaders })
+            setCV(await res.json())
+        } catch (err) { console.error(err) }
+    }
+
+    const handleCVUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            const res = await fetch(`${API_BASE}/uploads/images`, { // Reusing image upload or create new endpoint? 
+                method: 'POST', headers: authHeaders, body: formData
+            })
+            // Ideally we should have a generic file upload, but let's assume images endpoint works for now 
+            // or better, use the correct endpoint if I created one. I didn't create a generic file upload endpoint.
+            // Let's assume user manually pastes link for now or uses the documents upload and copies link.
+            // Actually, I can use the same documents/upload endpoint but that's for RAG. 
+            // Let's just allow pasting URL for now as per model.
+        } catch (err) { console.error(err) }
+    }
+
+    const updateCV = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch(`${API_BASE}/cv`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify(cv)
+            })
+            if (res.ok) alert('CV info updated!')
         } catch (err) { console.error(err) }
     }
 
@@ -366,6 +506,18 @@ const Dashboard = ({ token, onLogout }) => {
                     </button>
                     <button className={`tab-btn ${activeTab === 'chatbot' ? 'active' : ''}`} onClick={() => setActiveTab('chatbot')}>
                         <Bot size={18} /> Chatbot
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'skills' ? 'active' : ''}`} onClick={() => setActiveTab('skills')}>
+                        <Code size={18} /> Skills
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'testimonials' ? 'active' : ''}`} onClick={() => setActiveTab('testimonials')}>
+                        <Star size={18} /> Testimonials
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'contact' ? 'active' : ''}`} onClick={() => setActiveTab('contact')}>
+                        <Phone size={18} /> Contact Info
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'cv' ? 'active' : ''}`} onClick={() => setActiveTab('cv')}>
+                        <File size={18} /> CV
                     </button>
                 </div>
 
@@ -781,6 +933,204 @@ const Dashboard = ({ token, onLogout }) => {
                             <button className="save-btn" onClick={updateChatbotSettings}>
                                 <Save size={16} /> Save Settings
                             </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* ===================== Skills Tab ===================== */}
+                {activeTab === 'skills' && (
+                    <div className="tab-content">
+                        <div className="tab-header-row">
+                            <h3>Skills ({skills.length})</h3>
+                            <button className="add-btn" onClick={() => {
+                                setSkillForm({ name: '', category: '', proficiency: '', icon: '' })
+                                setEditingSkill(null)
+                                setShowSkillForm(true)
+                            }}>
+                                <Plus size={18} /> Add Skill
+                            </button>
+                        </div>
+
+                        {showSkillForm && (
+                            <div className="project-form-card">
+                                <div className="form-card-header">
+                                    <h4>{editingSkill ? 'Edit Skill' : 'New Skill'}</h4>
+                                    <button className="close-btn" onClick={() => setShowSkillForm(false)}><X size={18} /></button>
+                                </div>
+                                <form className="project-form" onSubmit={handleSkillSubmit}>
+                                    <div className="form-row">
+                                        <input placeholder="Skill Name" value={skillForm.name} onChange={e => setSkillForm({ ...skillForm, name: e.target.value })} required />
+                                        <input placeholder="Category (e.g. Frontend)" value={skillForm.category} onChange={e => setSkillForm({ ...skillForm, category: e.target.value })} required />
+                                    </div>
+                                    <div className="form-row">
+                                        <input type="number" placeholder="Proficiency (0-100)" value={skillForm.proficiency || ''} onChange={e => setSkillForm({ ...skillForm, proficiency: e.target.value })} />
+                                        <select value={skillForm.icon || ''} onChange={e => setSkillForm({ ...skillForm, icon: e.target.value })}>
+                                            <option value="">Select Icon</option>
+                                            <option value="Code">Code</option>
+                                            <option value="Cpu">Cpu</option>
+                                            <option value="Eye">Eye</option>
+                                            <option value="Brain">Brain</option>
+                                            <option value="Cloud">Cloud</option>
+                                            <option value="Database">Database</option>
+                                            <option value="Terminal">Terminal</option>
+                                            <option value="Globe">Globe</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" className="save-btn">
+                                        <Save size={16} /> {editingSkill ? 'Update' : 'Create'}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
+                        {skills.map(skill => (
+                            <div key={skill.id} className="project-card-admin">
+                                <div className="project-card-info">
+                                    <h4>{skill.name}</h4>
+                                    <span className="project-category">{skill.category}</span>
+                                </div>
+                                <div className="project-card-actions">
+                                    <button className="edit-btn" onClick={() => {
+                                        setSkillForm({ name: skill.name, category: skill.category, proficiency: skill.proficiency, icon: skill.icon })
+                                        setEditingSkill(skill.id)
+                                        setShowSkillForm(true)
+                                    }}>
+                                        <Edit3 size={14} /> Edit
+                                    </button>
+                                    <button className="delete-btn" onClick={() => deleteSkill(skill.id)}>
+                                        <Trash2 size={14} /> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* ===================== Testimonials Tab ===================== */}
+                {activeTab === 'testimonials' && (
+                    <div className="tab-content">
+                        <div className="tab-header-row">
+                            <h3>Testimonials ({testimonials.length})</h3>
+                            <button className="add-btn" onClick={() => {
+                                setTestimonialForm({ name: '', role: '', content: '', rating: 5, avatar_url: '', language: 'en' })
+                                setEditingTestimonial(null)
+                                setShowTestimonialForm(true)
+                            }}>
+                                <Plus size={18} /> Add Testimonial
+                            </button>
+                        </div>
+
+                        {showTestimonialForm && (
+                            <div className="project-form-card">
+                                <div className="form-card-header">
+                                    <h4>{editingTestimonial ? 'Edit Testimonial' : 'New Testimonial'}</h4>
+                                    <button className="close-btn" onClick={() => setShowTestimonialForm(false)}><X size={18} /></button>
+                                </div>
+                                <form className="project-form" onSubmit={handleTestimonialSubmit}>
+                                    <div className="form-row">
+                                        <input placeholder="Client Name" value={testimonialForm.name} onChange={e => setTestimonialForm({ ...testimonialForm, name: e.target.value })} required />
+                                        <input placeholder="Role / Company" value={testimonialForm.role} onChange={e => setTestimonialForm({ ...testimonialForm, role: e.target.value })} required />
+                                    </div>
+                                    <textarea placeholder="Feedback Content" rows={3} value={testimonialForm.content} onChange={e => setTestimonialForm({ ...testimonialForm, content: e.target.value })} required />
+                                    <div className="form-row">
+                                        <input type="number" max="5" min="1" placeholder="Rating (1-5)" value={testimonialForm.rating} onChange={e => setTestimonialForm({ ...testimonialForm, rating: e.target.value })} required />
+                                        <select value={testimonialForm.language} onChange={e => setTestimonialForm({ ...testimonialForm, language: e.target.value })}>
+                                            <option value="en">English</option>
+                                            <option value="ar">Arabic</option>
+                                        </select>
+                                    </div>
+                                    <input placeholder="Avatar URL (Optional)" value={testimonialForm.avatar_url} onChange={e => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })} />
+                                    <button type="submit" className="save-btn">
+                                        <Save size={16} /> {editingTestimonial ? 'Update' : 'Create'}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
+                        <div className="testimonials-admin-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+                            {testimonials.map(t => (
+                                <div key={t.id} className="project-card-admin" style={{ display: 'flex', flexDirection: 'column', height: 'auto' }}>
+                                    <div className="project-card-info">
+                                        <h4>{t.name} <span style={{ fontSize: '0.8em', color: '#888' }}>({t.language})</span></h4>
+                                        <span className="project-category">{t.role}</span>
+                                        <p style={{ fontStyle: 'italic', marginTop: '0.5rem' }}>"{t.content}"</p>
+                                        <div style={{ marginTop: '0.5rem' }}>{'★'.repeat(t.rating)}</div>
+                                    </div>
+                                    <div className="project-card-actions" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                                        <button className="edit-btn" onClick={() => {
+                                            setTestimonialForm(t)
+                                            setEditingTestimonial(t.id)
+                                            setShowTestimonialForm(true)
+                                        }}>
+                                            <Edit3 size={14} /> Edit
+                                        </button>
+                                        <button className="delete-btn" onClick={() => deleteTestimonial(t.id)}>
+                                            <Trash2 size={14} /> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ===================== Contact Info Tab ===================== */}
+                {activeTab === 'contact' && (
+                    <div className="tab-content">
+                        <h3>Contact Information</h3>
+                        <div className="project-form-card">
+                            <form className="project-form" onSubmit={updateContactInfo}>
+                                <div className="form-row">
+                                    <input placeholder="Email" value={contactInfo.email || ''} onChange={e => setContactInfo({ ...contactInfo, email: e.target.value })} />
+                                    <input placeholder="Phone" value={contactInfo.phone || ''} onChange={e => setContactInfo({ ...contactInfo, phone: e.target.value })} />
+                                </div>
+                                <div className="form-row">
+                                    <input placeholder="GitHub URL" value={contactInfo.github || ''} onChange={e => setContactInfo({ ...contactInfo, github: e.target.value })} />
+                                    <input placeholder="LinkedIn URL" value={contactInfo.linkedin || ''} onChange={e => setContactInfo({ ...contactInfo, linkedin: e.target.value })} />
+                                </div>
+                                <div className="form-row">
+                                    <input placeholder="Twitter/X URL" value={contactInfo.twitter || ''} onChange={e => setContactInfo({ ...contactInfo, twitter: e.target.value })} />
+                                    <input placeholder="Location" value={contactInfo.location || ''} onChange={e => setContactInfo({ ...contactInfo, location: e.target.value })} />
+                                </div>
+                                <button type="submit" className="save-btn">
+                                    <Save size={16} /> Save Contact Info
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* ===================== CV Tab ===================== */}
+                {activeTab === 'cv' && (
+                    <div className="tab-content">
+                        <h3>Curriculum Vitae</h3>
+                        <div className="project-form-card">
+                            <form className="project-form" onSubmit={updateCV}>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>CV File URL</label>
+                                    <input
+                                        placeholder="https://example.com/my-cv.pdf"
+                                        value={cv.file_url || ''}
+                                        onChange={e => setCV({ ...cv, file_url: e.target.value })}
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-main)' }}
+                                    />
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+                                        Upload your CV in the "Documents" tab to get a URL, or host it elsewhere.
+                                    </p>
+                                </div>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Last Updated Text</label>
+                                    <input
+                                        placeholder="e.g. Updated January 2026"
+                                        value={cv.updated_at || ''}
+                                        onChange={e => setCV({ ...cv, updated_at: e.target.value })}
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-main)' }}
+                                    />
+                                </div>
+                                <button type="submit" className="save-btn">
+                                    <Save size={16} /> Save CV Details
+                                </button>
+                            </form>
                         </div>
                     </div>
                 )}

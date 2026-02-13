@@ -1,37 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Cpu, Code, Eye, Brain, Cloud } from 'lucide-react'
+import { Cpu, Code, Eye, Brain, Cloud, Database, Terminal, Globe } from 'lucide-react'
+import API_BASE from '../config'
 import '../styles/Skills.css'
 
-const skillCategories = [
-    {
-        name: 'Programming',
-        icon: <Code size={24} />,
-        skills: ['Python', 'C++', 'SQL']
-    },
-    {
-        name: 'Machine Learning',
-        icon: <Cpu size={24} />,
-        skills: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'CNNs', 'Transfer Learning']
-    },
-    {
-        name: 'Computer Vision',
-        icon: <Eye size={24} />,
-        skills: ['OpenCV', 'YOLO', 'MediaPipe', 'Object Detection', 'Segmentation']
-    },
-    {
-        name: 'AI & NLP',
-        icon: <Brain size={24} />,
-        skills: ['Google Gemini', 'GPT APIs', 'RAG', 'OCR', 'Text Analysis']
-    },
-    {
-        name: 'Backend & Tools',
-        icon: <Cloud size={24} />,
-        skills: ['FastAPI', 'Flask', 'Docker', 'Git']
-    }
-]
+const iconMap = {
+    'Code': <Code size={24} />,
+    'Cpu': <Cpu size={24} />,
+    'Eye': <Eye size={24} />,
+    'Brain': <Brain size={24} />,
+    'Cloud': <Cloud size={24} />,
+    'Database': <Database size={24} />,
+    'Terminal': <Terminal size={24} />,
+    'Globe': <Globe size={24} />
+}
 
 const Skills = () => {
+    const [skillsData, setSkillsData] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchSkills = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/skills`)
+                const data = await res.json()
+
+                // Group by category
+                const grouped = data.reduce((acc, skill) => {
+                    if (!acc[skill.category]) {
+                        acc[skill.category] = {
+                            name: skill.category,
+                            icon: iconMap[skill.icon] || <Code size={24} />,
+                            skills: []
+                        }
+                    }
+                    acc[skill.category].skills.push(skill.name)
+                    return acc
+                }, {})
+
+                setSkillsData(Object.values(grouped))
+            } catch (err) {
+                console.error("Failed to fetch skills", err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchSkills()
+    }, [])
+
+    if (loading) return null
+
     return (
         <section id="skills" className="skills-section">
             <div className="container">
@@ -45,7 +63,7 @@ const Skills = () => {
                 </motion.h2>
 
                 <div className="skills-grid">
-                    {skillCategories.map((category, index) => (
+                    {skillsData.map((category, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
