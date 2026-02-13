@@ -1029,7 +1029,7 @@ const Dashboard = ({ token, onLogout }) => {
                                 <form className="project-form" onSubmit={handleTestimonialSubmit}>
                                     <div className="form-row">
                                         <input placeholder="Client Name" value={testimonialForm.name} onChange={e => setTestimonialForm({ ...testimonialForm, name: e.target.value })} required />
-                                        <input placeholder="Role / Company" value={testimonialForm.role} onChange={e => setTestimonialForm({ ...testimonialForm, role: e.target.value })} required />
+                                        <input placeholder="Role / Company (Optional)" value={testimonialForm.role || ''} onChange={e => setTestimonialForm({ ...testimonialForm, role: e.target.value })} />
                                     </div>
                                     <textarea placeholder="Feedback Content" rows={3} value={testimonialForm.content} onChange={e => setTestimonialForm({ ...testimonialForm, content: e.target.value })} required />
                                     <div className="form-row">
@@ -1039,7 +1039,10 @@ const Dashboard = ({ token, onLogout }) => {
                                             <option value="ar">Arabic</option>
                                         </select>
                                     </div>
-                                    <input placeholder="Avatar URL (Optional)" value={testimonialForm.avatar_url} onChange={e => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })} />
+                                    <div className="form-row">
+                                        <input placeholder="Avatar URL (Optional)" value={testimonialForm.avatar_url || ''} onChange={e => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })} />
+                                        <input placeholder="Link to Feedback (Optional)" value={testimonialForm.link || ''} onChange={e => setTestimonialForm({ ...testimonialForm, link: e.target.value })} />
+                                    </div>
                                     <button type="submit" className="save-btn">
                                         <Save size={16} /> {editingTestimonial ? 'Update' : 'Create'}
                                     </button>

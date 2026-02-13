@@ -2,7 +2,9 @@ from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.project import Project
 from app.models.portfolio import (
-    Experience, Certification, About
+    Experience, Certification, About, Skill,
+    Experience, Certification, About, Skill,
+    ContactInfo, CV, Testimonial
 )
 
 
@@ -143,15 +145,91 @@ SEED_CERTIFICATIONS = [
     }
 ]
 
+SEED_CONTACT_INFO = {
+    "email": "mohamed.alawy.21@gmail.com",
+    "phone": "+201009283969",
+    "github": "https://github.com/mohamed-alawy",
+    "linkedin": "https://www.linkedin.com/in/mohamed-alawy/",
+    "twitter": None,
+    "location": "Egypt"
+}
+
+SEED_CV = {
+    "file_url": "https://drive.google.com/file/d/1RLbofdD-xzom2KSFTjKeGq6ztNg6u85A/view?usp=drive_link",
+    "updated_at": "Updated August 2025"
+}
+
+SEED_TESTIMONIALS = [
+    {
+        "name": "Sarah Jenkins",
+        "role": "Product Manager @ TechFlow",
+        "content": "Mohamed delivered an exceptional Computer Vision model for our quality control system. His attention to detail and optimization for edge devices was impressive. Highly recommended!",
+        "rating": 5,
+        "language": "en",
+        "link": "https://www.linkedin.com/"
+    },
+    {
+        "name": "Ahmed Salem",
+        "role": "Startup Founder",
+        "content": "سعدت جداً بالتعامل مع البشمهندس محمد. قام ببناء نظام RAG كامل بشكل احترافي وسريع. فهمه للمتطلبات كان ممتازاً والتواصل كان سلساً جداً.",
+        "rating": 5,
+        "language": "ar",
+        "link": None
+    },
+    {
+        "name": "David Chen",
+        "role": "CTO @ DataSphere",
+        "content": "One of the best AI freelancers I've worked with. He solved a complex NLP problem that our internal team was struggling with for weeks.",
+        "rating": 5,
+        "language": "en",
+        "link": "https://www.upwork.com/"
+    }
+]
+
 SEED_ABOUT_CONTENT = """I’m Mohamed Usama, an AI freelancer with over 7 years of freelance experience and 2+ years solving real-world AI problems.
 I love turning challenging tasks into smart, practical solutions, whether it’s **Computer Vision, NLP, RAG, or AI agents**.
 
-With a strong ability to understand clients quickly and communicate ideas clearly, I make sure every project flows smoothly from concept to delivery.
 New challenges excite me - they push me to research, experiment, and deliver results that really work."""
+
+
+SEED_SKILLS = [
+    {"name": "Python", "category": "Programming", "icon": "Code", "proficiency": 95},
+    {"name": "C++", "category": "Programming", "icon": "Code", "proficiency": 80},
+    {"name": "SQL", "category": "Programming", "icon": "Database", "proficiency": 85},
+    
+    {"name": "TensorFlow", "category": "Machine Learning", "icon": "Cpu", "proficiency": 90},
+    {"name": "PyTorch", "category": "Machine Learning", "icon": "Cpu", "proficiency": 85},
+    {"name": "Scikit-learn", "category": "Machine Learning", "icon": "Cpu", "proficiency": 80},
+    {"name": "CNNs", "category": "Machine Learning", "icon": "Cpu", "proficiency": 80},
+    {"name": "Transfer Learning", "category": "Machine Learning", "icon": "Cpu", "proficiency": 80},
+
+    {"name": "OpenCV", "category": "Computer Vision", "icon": "Eye", "proficiency": 90},
+    {"name": "YOLO", "category": "Computer Vision", "icon": "Eye", "proficiency": 95},
+    {"name": "MediaPipe", "category": "Computer Vision", "icon": "Eye", "proficiency": 85},
+    {"name": "Object Detection", "category": "Computer Vision", "icon": "Eye", "proficiency": 90},
+    {"name": "Segmentation", "category": "Computer Vision", "icon": "Eye", "proficiency": 85},
+
+    {"name": "Google Gemini", "category": "AI & NLP", "icon": "Brain", "proficiency": 85},
+    {"name": "GPT APIs", "category": "AI & NLP", "icon": "Brain", "proficiency": 90},
+    {"name": "RAG", "category": "AI & NLP", "icon": "Brain", "proficiency": 80},
+    {"name": "OCR", "category": "AI & NLP", "icon": "Brain", "proficiency": 85},
+    {"name": "Text Analysis", "category": "AI & NLP", "icon": "Brain", "proficiency": 80},
+
+    {"name": "FastAPI", "category": "Backend & Tools", "icon": "Cloud", "proficiency": 90},
+    {"name": "Flask", "category": "Backend & Tools", "icon": "Cloud", "proficiency": 85},
+    {"name": "Docker", "category": "Backend & Tools", "icon": "Cloud", "proficiency": 80},
+    {"name": "Git", "category": "Backend & Tools", "icon": "Terminal", "proficiency": 90},
+]
 
 
 async def seed_projects(session: AsyncSession):
     """Seed the database with initial portfolio data if empty."""
+    
+    # Check if About exists to determine if we should print "Already initialized" messages
+    # But we still run checks per table to allow adding NEW features (like Testimonials) to existing deployments
+    about_exists = await session.execute(select(About))
+    is_initialized = bool(about_exists.scalars().first())
+
     # Seed Projects
     result = await session.execute(select(Project))
     if len(result.scalars().all()) == 0:
@@ -174,9 +252,34 @@ async def seed_projects(session: AsyncSession):
         print(f"Seeded {len(SEED_CERTIFICATIONS)} certifications.")
 
     # Seed About
-    result = await session.execute(select(About))
-    if not result.scalars().first():
+    if not is_initialized:
         session.add(About(content=SEED_ABOUT_CONTENT))
         print("Seeded About content.")
+
+    # Seed Skills
+    result = await session.execute(select(Skill))
+    if len(result.scalars().all()) == 0:
+        for s in SEED_SKILLS:
+            session.add(Skill(**s))
+        print(f"Seeded {len(SEED_SKILLS)} skills.")
+
+    # Seed Testimonials
+    result = await session.execute(select(Testimonial))
+    if len(result.scalars().all()) == 0:
+        for t in SEED_TESTIMONIALS:
+            session.add(Testimonial(**t))
+        print(f"Seeded {len(SEED_TESTIMONIALS)} testimonials.")
+
+    # Seed Contact Info
+    result = await session.execute(select(ContactInfo))
+    if not result.scalars().first():
+        session.add(ContactInfo(**SEED_CONTACT_INFO))
+        print("Seeded Contact Info.")
+
+    # Seed CV
+    result = await session.execute(select(CV))
+    if not result.scalars().first():
+        session.add(CV(**SEED_CV))
+        print("Seeded CV details.")
 
     await session.commit()

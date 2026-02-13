@@ -85,10 +85,11 @@ class SkillRead(SkillBase):
 
 class TestimonialBase(SQLModel):
     name: str
-    role: str
+    role: Optional[str] = None
     content: str = Field(sa_column=Column(Text))
     rating: int = Field(default=5)
     avatar_url: Optional[str] = None
+    link: Optional[str] = None
     language: str = Field(default="en") # "en" or "ar"
 
 class Testimonial(TestimonialBase, table=True):

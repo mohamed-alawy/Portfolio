@@ -70,8 +70,14 @@ const Testimonials = () => {
                                     </div>
                                 )}
                                 <div className="testimonial-info">
-                                    <h4>{testimonial.name}</h4>
-                                    <span className="testimonial-role">{testimonial.role}</span>
+                                    {testimonial.link ? (
+                                        <a href={testimonial.link} target="_blank" rel="noopener noreferrer" className="testimonial-namelink">
+                                            <h4>{testimonial.name} 🔗</h4>
+                                        </a>
+                                    ) : (
+                                        <h4>{testimonial.name}</h4>
+                                    )}
+                                    {testimonial.role && <span className="testimonial-role">{testimonial.role}</span>}
                                 </div>
                             </div>
 
