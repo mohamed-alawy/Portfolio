@@ -60,7 +60,8 @@
 .contact-form textarea {
     width: 100%;
     padding: 0.8rem 1rem;
-    background: var(--bg-secondary);
+    background: var(--bg-main);
+    /* Darker than secondary */
     border: 1px solid var(--border-color);
     border-radius: 10px;
     color: var(--text-main);
@@ -134,7 +135,8 @@
     text-decoration: none;
     padding: 0.7rem 1rem;
     border-radius: 10px;
-    background: var(--bg-secondary);
+    background: var(--bg-main);
+    /* Darker than secondary */
     transition: all 0.2s;
     font-size: 0.95rem;
 }
