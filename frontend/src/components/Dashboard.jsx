@@ -964,7 +964,7 @@ const Dashboard = ({ token, onLogout }) => {
                             <div className="tab-header-row">
                                 <h3>User Interaction History ({chatHistory.length})</h3>
                                 {chatHistory.length > 0 && (
-                                    <button className="delete-btn" onClick={deleteAllChatHistory} style={{ background: 'var(--error)', color: 'white' }}>
+                                    <button className="delete-btn" onClick={deleteAllChatHistory} style={{ background: '#dc3545', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.9rem' }}>
                                         <Trash2 size={16} /> Clear All History
                                     </button>
                                 )}
