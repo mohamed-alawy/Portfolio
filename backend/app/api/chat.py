@@ -32,9 +32,21 @@ async def chat(request: ChatRequest, session: AsyncSession = Depends(get_session
     result = await session.execute(select(ChatbotSettings))
     settings = result.scalars().first()
     
+    response_text = ""
+    
     if settings and not settings.is_active:
-        return ChatResponse(response=settings.inactive_message)
+        response_text = settings.inactive_message
+        # Store the question and the inactive response
+        question = UserQuestion(
+            content=request.message,
+            response=response_text,
+            timestamp=datetime.utcnow().isoformat()
+        )
+        session.add(question)
+        await session.commit()
+        return ChatResponse(response=response_text)
 
+    # Bot is active, get RAG response
     response_text = await rag_service.chat(
         message=request.message,
         history=request.history,

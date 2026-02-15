@@ -981,7 +981,7 @@ const Dashboard = ({ token, onLogout }) => {
                                         <div key={chat.id} className="message-card" style={{ borderLeft: '4px solid var(--primary)' }}>
                                             <div className="message-header">
                                                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                                                    {new Date(chat.timestamp).toLocaleString()}
+                                                    {new Date(chat.timestamp).toLocaleString('en-US')}
                                                 </span>
                                                 <button className="delete-btn" onClick={() => deleteChatQuestion(chat.id)}>
                                                     <Trash2 size={14} />
