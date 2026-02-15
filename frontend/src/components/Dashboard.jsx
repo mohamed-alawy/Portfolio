@@ -40,6 +40,7 @@ const Dashboard = ({ token, onLogout }) => {
 
     // Chatbot Settings
     const [chatbotSettings, setChatbotSettings] = useState({ is_active: true, inactive_message: '' })
+    const [chatHistory, setChatHistory] = useState([])
 
     // Skills
     const [skills, setSkills] = useState([])
@@ -66,7 +67,7 @@ const Dashboard = ({ token, onLogout }) => {
         if (activeTab === 'about') fetchAbout()
         if (activeTab === 'experience') fetchExperience()
         if (activeTab === 'certifications') fetchCertifications()
-        if (activeTab === 'chatbot') fetchChatbotSettings()
+        if (activeTab === 'chatbot') { fetchChatbotSettings(); fetchChatHistory() }
         if (activeTab === 'skills') fetchSkills()
         if (activeTab === 'testimonials') fetchTestimonials()
         if (activeTab === 'contact') fetchContactInfo()
@@ -90,6 +91,29 @@ const Dashboard = ({ token, onLogout }) => {
                 body: JSON.stringify(chatbotSettings)
             })
             if (res.ok) alert('Chatbot settings updated!')
+        } catch (err) { console.error(err) }
+    }
+
+    const fetchChatHistory = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/chat/history`, { headers: authHeaders })
+            if (res.ok) setChatHistory(await res.json())
+        } catch (err) { console.error(err) }
+    }
+
+    const deleteChatQuestion = async (id) => {
+        if (!window.confirm('Delete this interaction?')) return
+        try {
+            await fetch(`${API_BASE}/chat/history/${id}`, { method: 'DELETE', headers: authHeaders })
+            fetchChatHistory()
+        } catch (err) { console.error(err) }
+    }
+
+    const deleteAllChatHistory = async () => {
+        if (!window.confirm('Are you sure you want to delete ALL chat history?')) return
+        try {
+            await fetch(`${API_BASE}/chat/history`, { method: 'DELETE', headers: authHeaders })
+            fetchChatHistory()
         } catch (err) { console.error(err) }
     }
 
@@ -933,6 +957,48 @@ const Dashboard = ({ token, onLogout }) => {
                             <button className="save-btn" onClick={updateChatbotSettings}>
                                 <Save size={16} /> Save Settings
                             </button>
+                        </div>
+
+                        {/* Chat History Section */}
+                        <div style={{ marginTop: '2rem' }}>
+                            <div className="tab-header-row">
+                                <h3>User Interaction History ({chatHistory.length})</h3>
+                                {chatHistory.length > 0 && (
+                                    <button className="delete-btn" onClick={deleteAllChatHistory} style={{ background: 'var(--error)', color: 'white' }}>
+                                        <Trash2 size={16} /> Clear All History
+                                    </button>
+                                )}
+                            </div>
+
+                            {chatHistory.length === 0 ? (
+                                <div className="empty-state">
+                                    <Bot size={48} strokeWidth={1} />
+                                    <p>No chat history available.</p>
+                                </div>
+                            ) : (
+                                <div className="chat-history-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {chatHistory.map(chat => (
+                                        <div key={chat.id} className="message-card" style={{ borderLeft: '4px solid var(--primary)' }}>
+                                            <div className="message-header">
+                                                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                                    {new Date(chat.timestamp).toLocaleString()}
+                                                </span>
+                                                <button className="delete-btn" onClick={() => deleteChatQuestion(chat.id)}>
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                            <div style={{ marginTop: '0.5rem' }}>
+                                                <p><strong>User:</strong> {chat.content}</p>
+                                                {chat.response && (
+                                                    <p style={{ marginTop: '0.5rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-color)', paddingTop: '0.5rem' }}>
+                                                        <strong>Bot:</strong> {chat.response}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

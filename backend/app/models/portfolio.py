@@ -133,5 +133,22 @@ class CV(CVBase, table=True):
 class CVCreate(CVBase):
     pass
 
+
 class CVRead(CVBase):
     id: int
+
+# ---
+
+class UserQuestionBase(SQLModel):
+    content: str
+    response: Optional[str] = None
+    timestamp: str 
+    
+class UserQuestion(UserQuestionBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+class UserQuestionRead(UserQuestionBase):
+    id: int
+
+class UserQuestionCreate(UserQuestionBase):
+    pass
