@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Menu, X, Moon, Sun } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -7,8 +7,22 @@ import '../styles/Navbar.css'
 
 const Navbar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                setIsScrolled(true)
+            } else {
+                setIsScrolled(false)
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     const navLinks = [
         { name: 'About', href: '#about' },
@@ -46,7 +60,7 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
 
     return (
-        <nav className="navbar">
+        <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
                 <div className="logo">
                     <a href="/" onClick={handleLogoClick}>MA.</a>
